@@ -1,4 +1,5 @@
 package com.projectdevs.donacionesapp.ui.screens
+
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -36,10 +37,10 @@ data class DonationRequest(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DonationRequestsScreen(
+    modifier: Modifier = Modifier,
     onBack: () -> Unit = {},
     onSelectRequest: (DonationRequest) -> Unit = {},
-    modifier: Modifier = Modifier
-) {
+    ) {
     // Estado base: lista mutable (podés agregar más items en runtime)
     val requests = remember { sampleRequests().toMutableStateList() }
 
@@ -67,8 +68,9 @@ fun DonationRequestsScreen(
                             compareBy<DonationRequest> { it.distanceKm ?: Double.MAX_VALUE }
                                 .thenBy { it.title }
                         )
-                        "Urgencia"  -> seq.sortedBy { urgencyScore(it) } // menor = más urgente (ejemplo)
-                        else        -> seq
+
+                        "Urgencia" -> seq.sortedBy { urgencyScore(it) } // menor = más urgente (ejemplo)
+                        else -> seq
                     }
                 }
                 .toList()
@@ -94,7 +96,7 @@ fun DonationRequestsScreen(
 //                onClick = { requests += randomRequest() },
                 onClick = { /*ACA LA NAVEGACIÓN */ },
                 icon = { Icon(Icons.Filled.Add, contentDescription = null) },
-                text  = { Text("Agregar") }
+                text = { Text("Agregar") }
             )
         },
         bottomBar = {
