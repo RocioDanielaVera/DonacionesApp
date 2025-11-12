@@ -2,10 +2,10 @@
 <!-- Login-->
     <string name="app_name">DonacionesApp</string>
     <string name="login_welcome_esp">Bienvenido</string>
-    <string name="login_welcome_description_esp">Ingresá y comenzá a navegar en nustra red de donantes y donatarios locales</string>
+    <string name="login_welcome_description_esp">Empecemos a hacer una diferencia juntos</string>
     <string name="login_email_or_user_outlined_textfield_esp">Correo electronico o usuario</string>
     <string name="login_password_outlined_textfield_esp">Contraseña</string>
-    <string name="login_sign_in_ask_esp">Ingresar</string>
+    <string name="login_sign_in_ask_esp">¿Todavia no tienes una cuenta?</string>
     <string name="login_sign_in_onclick_text_esp">Registrase</string>
     <string name="login_text_button_esp">Ingresar</string>
     <string name="Login_privacy_text_end_terms_esp">Al usar DonacionesM, confirmo que acepto Términos de Uso y Politica de privacidad</string>

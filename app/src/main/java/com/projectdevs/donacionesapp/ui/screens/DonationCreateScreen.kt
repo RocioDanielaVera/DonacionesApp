@@ -42,7 +42,7 @@ fun DonationCreateScreen(
     // Estado UI
     val focus = LocalFocusManager.current
     val categories = listOf("Alimentos", "Ropa", "Educación", "Salud")
-    val locations  = listOf("Florencio Varela 1903", "San Justo", "Morón", "CABA")
+    val locations = listOf("Florencio Varela 1903", "San Justo", "Morón", "CABA")
 
     var category by remember { mutableStateOf<String?>(null) }
     var location by remember { mutableStateOf<String?>(null) }
@@ -54,7 +54,7 @@ fun DonationCreateScreen(
 
     // Validaciones simples (no hacen falta en realidad)
     val titleValid = title.trim().length in 6..60
-    val descValid  = description.trim().length in 20..600
+    val descValid = description.trim().length in 20..600
     val categoryValid = category != null
     val locationValid = location != null
     val formValid = titleValid && descValid && categoryValid && locationValid
@@ -63,7 +63,13 @@ fun DonationCreateScreen(
         modifier = modifier.fillMaxSize(),
         topBar = {
             TopAppBar(
-                title = { Text("Solicitar Donación", maxLines = 1, overflow = TextOverflow.Ellipsis) },
+                title = {
+                    Text(
+                        "Solicitar Donación",
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                },
                 navigationIcon = {
                     IconButton(onClick = onClose) {
                         Icon(Icons.Default.Close, contentDescription = "Cerrar")
@@ -173,7 +179,10 @@ fun DonationCreateScreen(
                         .padding(bottom = 24.dp)
                         .height(48.dp)
                 ) {
-                    Text("Crear", style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold))
+                    Text(
+                        "Crear",
+                        style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold)
+                    )
                 }
             }
         }
@@ -218,7 +227,12 @@ private fun LabeledPicker(
         Surface(
             tonalElevation = 0.dp,
             shape = MaterialTheme.shapes.medium,
-            border = DividerDefaults.color.let { BorderStroke(1.dp, if (isError) MaterialTheme.colorScheme.error else it) },
+            border = DividerDefaults.color.let {
+                BorderStroke(
+                    1.dp,
+                    if (isError) MaterialTheme.colorScheme.error else it
+                )
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(56.dp)
