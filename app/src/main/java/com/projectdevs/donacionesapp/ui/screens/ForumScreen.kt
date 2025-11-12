@@ -39,6 +39,7 @@ data class DonationRequest(
 fun DonationRequestsScreen(
     onBack: () -> Unit = {},
     onSelectRequest: (DonationRequest) -> Unit = {},
+    onNavigateToCreate: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     // Estado base: lista mutable (podés agregar más items en runtime)
@@ -93,33 +94,33 @@ fun DonationRequestsScreen(
             ExtendedFloatingActionButton(
                 // HAY DOS OPCIONES + RANDOM REQUEST O HACER QUE LLEVE A LA +SCREEN DE CREACIÓN
 //                onClick = { requests += randomRequest() },
-                onClick = { /*ACA LA NAVEGACIÓN */ },
+                onClick = onNavigateToCreate,
                 icon = { Icon(Icons.Filled.Add, contentDescription = null) },
                 text  = { Text("Agregar") }
             )
         },
-        bottomBar = {
-            NavigationBar {
-                NavigationBarItem(
-                    selected = true,
-                    onClick = { },
-                    icon = { Icon(Icons.Filled.Home, contentDescription = "Inicio") },
-                    label = { Text("Inicio") }
-                )
-                NavigationBarItem(
-                    selected = false,
-                    onClick = { },
-                    icon = { Icon(Icons.Filled.List, contentDescription = "Solicitudes") },
-                    label = { Text("Solicitudes") }
-                )
-                NavigationBarItem(
-                    selected = false,
-                    onClick = { },
-                    icon = { Icon(Icons.Filled.Person, contentDescription = "Perfil") },
-                    label = { Text("Perfil") }
-                )
-            }
-        }
+//        bottomBar = {
+//            NavigationBar {
+//                NavigationBarItem(
+//                    selected = true,
+//                    onClick = { },
+//                    icon = { Icon(Icons.Filled.Home, contentDescription = "Inicio") },
+//                    label = { Text("Inicio") }
+//                )
+//                NavigationBarItem(
+//                    selected = false,
+//                    onClick = { },
+//                    icon = { Icon(Icons.Filled.List, contentDescription = "Solicitudes") },
+//                    label = { Text("Solicitudes") }
+//                )
+//                NavigationBarItem(
+//                    selected = false,
+//                    onClick = { },
+//                    icon = { Icon(Icons.Filled.Person, contentDescription = "Perfil") },
+//                    label = { Text("Perfil") }
+//                )
+//            }
+//        }
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -448,5 +449,7 @@ private fun randomRequest(): DonationRequest {
 @Preview(showBackground = true, widthDp = 390, heightDp = 844)
 @Composable
 private fun DonationRequestsScreenPreview() {
-    MaterialTheme { DonationRequestsScreen() }
+    MaterialTheme { DonationRequestsScreen(
+        onNavigateToCreate = { },
+    ) }
 }

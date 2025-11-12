@@ -61,28 +61,28 @@ fun ProfileScreen(navController: NavController,
                 )
             }
         },
-        bottomBar = {
-            NavigationBar {
-                NavigationBarItem(
-                    selected = false,
-                    onClick = { /* ir al home */ },
-                    icon = { Icon(Icons.Default.Home, contentDescription = "Inicio") },
-                    label = { Text("Inicio") }
-                )
-                NavigationBarItem(
-                    selected = false,
-                    onClick = { /* ir a solicitar donacion */ },
-                    icon = { Icon(Icons.Default.Favorite, contentDescription = "Solicitud donación") },
-                    label = { Text("Solicitar") }
-                )
-                NavigationBarItem(
-                    selected = true,
-                    onClick = { /* ir a perfil */ },
-                    icon = { Icon(Icons.Default.Person, contentDescription = "Perfil") },
-                    label = { Text("Perfil") }
-                )
-            }
-        }
+//        bottomBar = {
+//            NavigationBar {
+//                NavigationBarItem(
+//                    selected = false,
+//                    onClick = { /* ir al home */ },
+//                    icon = { Icon(Icons.Default.Home, contentDescription = "Inicio") },
+//                    label = { Text("Inicio") }
+//                )
+//                NavigationBarItem(
+//                    selected = false,
+//                    onClick = { /* ir a solicitar donacion */ },
+//                    icon = { Icon(Icons.Default.Favorite, contentDescription = "Solicitud donación") },
+//                    label = { Text("Solicitar") }
+//                )
+//                NavigationBarItem(
+//                    selected = true,
+//                    onClick = { /* ir a perfil */ },
+//                    icon = { Icon(Icons.Default.Person, contentDescription = "Perfil") },
+//                    label = { Text("Perfil") }
+//                )
+//            }
+//        }
     ) { innerPadding ->
         ProfileContent(Modifier.padding(innerPadding),
             onEditClick = onEditClick
