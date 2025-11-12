@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.dp
 
 @Suppress("ktlint:standard:function-naming")
 @Composable
-fun CustomButton(value: String, enabled: Boolean) {
+fun CustomButton(value: String, enabled: Boolean, navigateToHomeScreen:() -> Unit) {
 
     val color = if (enabled) {
         MaterialTheme.colorScheme.primary
@@ -27,7 +27,7 @@ fun CustomButton(value: String, enabled: Boolean) {
             .fillMaxWidth()
             .height(50.dp),
         onClick = {
-
+            navigateToHomeScreen()
         },
         shape = RoundedCornerShape(10.dp),
         colors =

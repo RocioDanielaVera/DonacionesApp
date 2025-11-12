@@ -13,11 +13,15 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -42,22 +46,26 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
+import androidx.navigation.NavController
 import com.projectdevs.donacionesapp.R
 import com.projectdevs.donacionesapp.ui.components.CustomButton
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PostScreen(innerPadding: PaddingValues) {
+fun PostScreen(navController: NavController) {
     var title by rememberSaveable { mutableStateOf("") }
     var description by rememberSaveable { mutableStateOf("") }
     var preferences by rememberSaveable { mutableStateOf("") }
     val itemState = listOf("Nuevo", "Usando")
     val itemCategory = listOf("Indumentaria", "Electrodomesticos", "Gastronomia")
     var expanded by remember { mutableStateOf(false) }
+    var expandedCategory by remember { mutableStateOf(false) }
     var selectedItem by remember { mutableStateOf("") }
     var selectedCategory by remember { mutableStateOf("") }
     var textFiledSize by remember { mutableStateOf(Size.Zero) }
@@ -86,7 +94,9 @@ fun PostScreen(innerPadding: PaddingValues) {
                 actions = {
                     Text(
                         modifier = Modifier
-                            .clickable(onClick = {})
+                            .clickable(onClick = {
+                                navController.popBackStack()
+                            })
                             .padding(end = 20.dp),
                         text = "Publicar",
                         color = MaterialTheme.colorScheme.primary
@@ -113,7 +123,7 @@ fun PostScreen(innerPadding: PaddingValues) {
                         .background(Color.Gray)
                 )
                 Spacer(Modifier.width(10.dp))
-                Text(text = "User 1234")
+                Text(text = "User1234")
             }
             Column(
                 modifier = Modifier.fillMaxWidth(),
@@ -127,7 +137,12 @@ fun PostScreen(innerPadding: PaddingValues) {
                         .height(80.dp)
                         .background(Color.LightGray),
                 )
-                Text(text = "Agregar imágen")
+                Text(
+                    text = "Agregar imágen",
+                )
+
+                Spacer(Modifier.height(15.dp))
+
                 //Titulo
                 OutlinedTextField(
                     modifier = Modifier.fillMaxWidth(),
@@ -138,7 +153,7 @@ fun PostScreen(innerPadding: PaddingValues) {
                     }
                 )
                 //Estado del producto
-                Column(modifier = Modifier.padding(20.dp)) {
+                Column {
                     OutlinedTextField(
                         value = selectedItem,
                         onValueChange = { selectedItem = it },
@@ -172,7 +187,7 @@ fun PostScreen(innerPadding: PaddingValues) {
                     }
                 }
 
-
+                Spacer(Modifier.height(10.dp))
                 //Descripción
                 OutlinedTextField(
                     modifier = Modifier.fillMaxWidth(),
@@ -192,7 +207,7 @@ fun PostScreen(innerPadding: PaddingValues) {
                     }
                 )
                 //Categoria
-                Column(modifier = Modifier.padding(20.dp)) {
+                Column() {
                     OutlinedTextField(
                         value = selectedCategory,
                         onValueChange = { selectedCategory = it },
@@ -206,20 +221,20 @@ fun PostScreen(innerPadding: PaddingValues) {
                         },
                         trailingIcon = {
                             Icon(icon, "", Modifier.clickable {
-                                expanded = !expanded
+                                expandedCategory = !expandedCategory
                             })
                         }
 
                     )
                     DropdownMenu(
-                        expanded = expanded,
-                        onDismissRequest = { expanded = false },
+                        expanded = expandedCategory,
+                        onDismissRequest = { expandedCategory = false },
                         modifier = Modifier.width(with(LocalDensity.current) { textFiledSize.width.toDp() })
                     ) {
                         itemCategory.forEach { label ->
                             DropdownMenuItem(text = { Text(text = label) }, onClick = {
-                                selectedCategory= label
-                                expanded = false
+                                selectedCategory = label
+                                expandedCategory = false
                             })
                         }
 
@@ -227,12 +242,13 @@ fun PostScreen(innerPadding: PaddingValues) {
                     }
                 }
 
-
+                Spacer(Modifier.height(20.dp))
                 //Titulo ubicación
                 Text(
                     modifier = Modifier.fillMaxWidth(),
                     text = "Ubicacion",
-                    textAlign = TextAlign.Start
+                    textAlign = TextAlign.Start,
+                    fontWeight = FontWeight.Bold
                 )
                 //Descripción de ubicación
                 Text(text = stringResource(R.string.post_location_help_context_message))
@@ -241,11 +257,22 @@ fun PostScreen(innerPadding: PaddingValues) {
                     Spacer(Modifier.weight(1f))
                     Text(text = "Editar")
                 }
+                Spacer(Modifier.height(20.dp))
                 //Boton publicar
-                CustomButton(
-                    value = stringResource(R.string.login_text_button_esp),
-                    enabled = true
-                )
+                Button(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(50.dp),
+                    onClick = {
+                    },
+                    shape = RoundedCornerShape(10.dp),
+                    colors =
+                        ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.primary,
+                        ),
+                ) {
+                    Text(text = "Publicar", color = MaterialTheme.colorScheme.onPrimary)
+                }
             }
 
         }

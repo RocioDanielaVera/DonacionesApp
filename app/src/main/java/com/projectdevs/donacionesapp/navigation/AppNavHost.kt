@@ -20,6 +20,8 @@ import com.projectdevs.donacionesapp.ui.screens.DonationDetailScreen
 import com.projectdevs.donacionesapp.ui.screens.DonationRequestsScreen
 import com.projectdevs.donacionesapp.ui.screens.EditProfileScreen
 import com.projectdevs.donacionesapp.ui.screens.HomeScreen
+import com.projectdevs.donacionesapp.ui.screens.LoginScreen
+import com.projectdevs.donacionesapp.ui.screens.PostScreen
 import com.projectdevs.donacionesapp.ui.screens.ProfileScreen
 
 @Composable
@@ -38,12 +40,20 @@ fun AppNavHost() {
                     top = 0.dp
                 ),
         ) {
+            composable("loginScreen") {
+                LoginScreen(navController = navController)
+
+            }
+            composable("postScreen") {
+                PostScreen(navController = navController)
+
+            }
             composable(BottomNavItem.Home.route) {
                 HomeScreen(
                     onItemClick = { donation ->
                         navController.navigate("detail/${donation.id}")
                     },
-                    onAddClick = { /* TODO */ },
+                    onAddClick = { navController.navigate("postScreen") },
                     donaciones = donaciones,
                 )
             }

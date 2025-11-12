@@ -2,7 +2,6 @@ package com.projectdevs.donacionesapp.ui.screens
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -32,13 +31,15 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.projectdevs.donacionesapp.R
+import com.projectdevs.donacionesapp.ui.components.BottomNavItem
 import com.projectdevs.donacionesapp.ui.components.CustomButton
 import com.projectdevs.donacionesapp.ui.components.CustomDefaultText
 import com.projectdevs.donacionesapp.ui.components.CustomTitle
 
 @Composable
-fun LoginScreen(paddingValues: PaddingValues) {
+fun LoginScreen(navController: NavController) {
     var password by rememberSaveable { mutableStateOf("") }
     var email by rememberSaveable { mutableStateOf("") }
     var passwordVisibility by remember { mutableStateOf(false) }
@@ -52,7 +53,6 @@ fun LoginScreen(paddingValues: PaddingValues) {
         modifier =
             Modifier
                 .fillMaxSize()
-                .padding(paddingValues = paddingValues)
                 .padding(20.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -110,7 +110,10 @@ fun LoginScreen(paddingValues: PaddingValues) {
         }
         CustomButton(
             value = stringResource(R.string.login_text_button_esp),
-            enabled = enabledButton
+            enabled = enabledButton,
+            navigateToHomeScreen = {
+                navController.navigate(BottomNavItem.Home.route)
+            }
         )
 
         Spacer(Modifier.height(30.dp))
