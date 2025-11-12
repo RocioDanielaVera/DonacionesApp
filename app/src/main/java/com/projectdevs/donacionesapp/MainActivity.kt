@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.projectdevs.donacionesapp.ui.screens.LoginScreen
 import com.projectdevs.donacionesapp.ui.theme.DonacionesAppTheme
 
 class MainActivity : ComponentActivity() {
@@ -20,28 +21,10 @@ class MainActivity : ComponentActivity() {
         setContent {
             DonacionesAppTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                    LoginScreen(innerPadding)
                 }
             }
         }
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    DonacionesAppTheme {
-        Greeting("Android")
-    }
-}

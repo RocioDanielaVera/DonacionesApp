@@ -1,3 +1,28 @@
 <resources>
+<!-- Login-->
     <string name="app_name">DonacionesApp</string>
+    <string name="login_welcome_esp">Bienvenido</string>
+    <string name="login_welcome_description_esp">Ingresá y comenzá a navegar en nustra red de donantes y donatarios locales</string>
+    <string name="login_email_or_user_outlined_textfield_esp">Correo electronico o usuario</string>
+    <string name="login_password_outlined_textfield_esp">Contraseña</string>
+    <string name="login_sign_in_ask_esp">Ingresar</string>
+    <string name="login_sign_in_onclick_text_esp">Registrase</string>
+    <string name="login_text_button_esp">Ingresar</string>
+    <string name="Login_privacy_text_end_terms_esp">Al usar DonacionesM, confirmo que acepto Términos de Uso y Politica de privacidad</string>
+<!-- Post-->
+    <string name="post_topbar_new_post_title">Nueva publicación</string>
+    <string name="post_onclick_button_in_topbar">Publicar</string>
+    <string name="post_add_image_esp">Agregar imágen</string>
+    <string name="post_title_hint_outlined_textfield_esp">Titulo de la publicación</string>
+    <string name="post_state_hint_outlined_textfield_esp">Estado</string>
+    <string name="post_description_hint_outlined_textfield_esp">Descripción</string>
+    <string name="post_description_hint_esp">Preferencias de entrega</string>
+    <string name="post_category_text_dropdown_menu_">Categoria</string>
+    <string name="post_category_clothes_text_dropdown_menu_">Indumentaria</string>
+    <string name="post_category_food_text_dropdown_menu_">Gastronomia</string>
+    <string name="post_category_electrodomesthics_text_dropdown_menu_">Electrodomesticos</string>
+    <string name="post_default_user_name">user 1234</string>
+    <string name="post_location_title">Ubicación</string>
+    <string name="post_location_help_context_message">La ubicación nos ayuda a reocmendar tu donación a personas cercanas a la zona</string>
+    <string name="post_location_default">La matanza xxx</string>
 </resources>
