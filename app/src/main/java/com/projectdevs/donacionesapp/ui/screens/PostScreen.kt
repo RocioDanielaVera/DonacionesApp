@@ -58,7 +58,10 @@ import com.projectdevs.donacionesapp.ui.components.CustomButton
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PostScreen(navController: NavController) {
+fun PostScreen(
+    navController: NavController,
+    onBackClick: () -> Unit
+) {
     var title by rememberSaveable { mutableStateOf("") }
     var description by rememberSaveable { mutableStateOf("") }
     var preferences by rememberSaveable { mutableStateOf("") }
@@ -83,8 +86,7 @@ fun PostScreen(navController: NavController) {
                     Text(text = "Nueva publicación", fontSize = 18.sp)
                 },
                 navigationIcon = {
-                    IconButton(onClick = {
-                    }) {
+                    IconButton(onClick = onBackClick) {
                         Icon(
                             imageVector = Icons.Default.KeyboardArrowLeft,
                             contentDescription = null

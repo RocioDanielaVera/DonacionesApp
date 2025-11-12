@@ -5,11 +5,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.projectdevs.donacionesapp.domain.donaciones
@@ -27,26 +29,34 @@ import com.projectdevs.donacionesapp.ui.screens.ProfileScreen
 @Composable
 fun AppNavHost() {
     val navController = rememberNavController()
+    val currentBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = currentBackStackEntry?.destination?.route
 
     Scaffold(
-        bottomBar = { BottomAppBar(navController = navController) },
-    ) { padding ->
+        bottomBar = {
+            if (currentRoute != Screen.Login.route) {
+                BottomAppBar(navController = navController)
+            }
+                    },
+        ) { padding ->
         NavHost(
             navController = navController,
-            startDestination = BottomNavItem.Home.route,
+            startDestination = Screen.Login.route,
             modifier = Modifier
                 .padding(
                     bottom = padding.calculateBottomPadding(),
                     top = 0.dp
                 ),
         ) {
-            composable("loginScreen") {
+            composable(Screen.Login.route) {
                 LoginScreen(navController = navController)
 
             }
             composable("postScreen") {
-                PostScreen(navController = navController)
-
+                PostScreen(
+                    onBackClick = {navController.popBackStack(Screen.Home.route, inclusive = false)},
+                    navController = navController
+                )
             }
             composable(BottomNavItem.Home.route) {
                 HomeScreen(
