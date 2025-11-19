@@ -66,7 +66,7 @@ fun EditProfileContent(
     navController: NavController
 ) {
     val verde = colorResource(id = R.color.verde)
-    var nombre by remember { mutableStateOf("Usuario 1234") }
+    var nombre by remember { mutableStateOf("Usuario") }
     var ubicacion by remember { mutableStateOf("San Justo") }
     var mail by remember { mutableStateOf("usuario1234@gmail.com") }
     var confirmarGuardado by remember { mutableStateOf(false) }
@@ -103,7 +103,7 @@ fun EditProfileContent(
                     .align(Alignment.BottomEnd)
                     .offset(x = (-120).dp, y = (-8).dp)
                     .size(36.dp)
-                    .background(Color(0xFF2196F3), CircleShape)
+                    .background(Color(0xFF74B895), CircleShape)
             ) {
                 Icon(
                     imageVector = Icons.Default.Edit,

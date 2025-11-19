@@ -32,18 +32,22 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.projectdevs.donacionesapp.domain.historialDonaciones
 import com.projectdevs.donacionesapp.ui.theme.DonacionesAppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileScreen(navController: NavController,
-                  onEditClick: () -> Unit) {
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Perfil") },
-                navigationIcon = {
-                    IconButton(onClick = { /* volver atras */ }) {
+    fun ProfileScreen(navController: NavController,
+                      onEditClick: () -> Unit,
+                      onBackClick: () -> Unit,
+                      onAddClick: () -> Unit,
+                      onDonationCardClick: (String) -> Unit) {
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = { Text("Perfil") },
+                    navigationIcon = {
+                    IconButton(onClick = onBackClick) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Volver")
                     }
                 }
@@ -51,9 +55,10 @@ fun ProfileScreen(navController: NavController,
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { /* ir a crear donacion */ },
-                containerColor = colorResource(id = R.color.verde),
-                        contentColor = Color.White
+                onClick = onAddClick,
+                containerColor = Color(0xFF74B895),
+                contentColor = Color.White ,
+                shape = CircleShape
             ) {
                 Icon(
                     Icons.Default.Add,
@@ -61,47 +66,37 @@ fun ProfileScreen(navController: NavController,
                 )
             }
         },
-//        bottomBar = {
-//            NavigationBar {
-//                NavigationBarItem(
-//                    selected = false,
-//                    onClick = { /* ir al home */ },
-//                    icon = { Icon(Icons.Default.Home, contentDescription = "Inicio") },
-//                    label = { Text("Inicio") }
-//                )
-//                NavigationBarItem(
-//                    selected = false,
-//                    onClick = { /* ir a solicitar donacion */ },
-//                    icon = { Icon(Icons.Default.Favorite, contentDescription = "Solicitud donación") },
-//                    label = { Text("Solicitar") }
-//                )
-//                NavigationBarItem(
-//                    selected = true,
-//                    onClick = { /* ir a perfil */ },
-//                    icon = { Icon(Icons.Default.Person, contentDescription = "Perfil") },
-//                    label = { Text("Perfil") }
-//                )
-//            }
-//        }
     ) { innerPadding ->
         ProfileContent(Modifier.padding(innerPadding),
-            onEditClick = onEditClick
+            onEditClick = onEditClick,
+            onDonationCardClick = { category ->
+                navController.navigate("donation_history/${category}")
+            }
         )
     }
 }
 @Composable
 fun ProfileContent(
     modifier: Modifier = Modifier,
-    onEditClick: () -> Unit
+    onEditClick: () -> Unit,
+    onDonationCardClick: (String) -> Unit
 ) {
     val verde = colorResource(id = R.color.verde)
 
-    val donations = listOf(
-        "Alimentos" to 5,
-        "Indumentaria" to 2,
-        "Electrodomésticos" to 1
-    )
-    val totalDonaciones = donations.sumOf { it.second }
+    val history = historialDonaciones
+
+    val donationsByCategory = history
+        .groupBy { it.categoria }
+        .map { (category, list) -> category to list.size }
+
+    val totalDonaciones = history.size
+
+    val fixedCategories = listOf("Alimentos", "Indumentaria", "Electrodomésticos")
+
+    val finalDonationsList = fixedCategories.map { fixedCategory ->
+        val count = donationsByCategory.firstOrNull { it.first == fixedCategory }?.second ?: 0
+        fixedCategory to count
+    }.filter { it.second > 0 }
 
         Column(
             modifier = modifier
@@ -124,55 +119,47 @@ fun ProfileContent(
                         .background(Color.LightGray)
                         .align(Alignment.Center)
                 )
-
-                Button(
+                IconButton(
                     onClick = onEditClick,
-                    shape = RoundedCornerShape(8.dp),
-                    contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = verde),
                     modifier = Modifier
-                        .align(Alignment.CenterEnd)
-                        .padding(end = 8.dp)
+                        .align(Alignment.BottomEnd)
+                        .offset(x = (-120).dp, y = (-8).dp)
+                        .size(36.dp)
+                        .background(Color(0xFF74B895), CircleShape)
                 ) {
                     Icon(
-                        Icons.Default.Edit,
-                        contentDescription = "Editar",
-                        modifier = Modifier.size(16.dp)
+                        imageVector = Icons.Default.Edit,
+                        contentDescription = "Editar foto",
+                        tint = Color.White
                     )
-                    Spacer(modifier = Modifier.width(6.dp))
-                    Text("Editar", fontSize = 14.sp)
                 }
             }
             Spacer(modifier = Modifier.height(12.dp))
             Column(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally // Centra la Row
             ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text("Rango", fontWeight = FontWeight.Bold, fontSize = 25.sp)
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Spacer(modifier = Modifier.width(25.dp))
+                    Text("Usuario", fontWeight = FontWeight.Bold, fontSize = 25.sp)
                     Spacer(modifier = Modifier.width(6.dp))
-                    Icon(
-                        Icons.Default.Star,
-                        contentDescription = "Rango",
-                        tint = Color(0xFFFFD700),
-                        modifier = Modifier.size(25.dp)
+                    Icon(Icons.Default.Star, contentDescription = "Rango", tint = Color(0xFFFFD700),
+                        modifier = Modifier
+                            .size(25.dp)
+                            .offset(y = (-2).dp)
                     )
                 }
                 Spacer(modifier = Modifier.height(4.dp))
                 Text("Donaciones: $totalDonaciones", fontSize = 14.sp, color = Color.Black)
             }
             Spacer(modifier = Modifier.height(15.dp))
-            // Nombre y ubicación
+            // ubicación
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Column {
-                    Text("Nombre", fontSize = 16.sp, fontWeight = FontWeight.Bold)
-                    Text("Usuario 1234", fontSize = 14.sp)
-                }
-
                 Column {
                     Text("Ubicación", fontSize = 16.sp, fontWeight = FontWeight.Bold)
                     Text("San Justo", fontSize = 14.sp)
@@ -192,8 +179,13 @@ fun ProfileContent(
 
             // Lista de donaciones
             LazyColumn {
-                items(donations) { (category, count) ->
-                    DonationCard(category, count)
+                items(finalDonationsList) { (category, count) ->
+                    // 💡 Nuevo: Pasamos la acción al componente DonationCard
+                    DonationCard(
+                        category,
+                        count,
+                        onClick = onDonationCardClick // Pasamos la lambda de navegación
+                    )
                     Spacer(modifier = Modifier.height(8.dp))
                 }
             }
@@ -202,7 +194,7 @@ fun ProfileContent(
     }
 
 @Composable
-fun DonationCard(category: String, count: Int) {
+fun DonationCard(category: String, count: Int,onClick: (String) -> Unit) {
     val verdeFondo = colorResource(id = R.color.verdeFondo)
     val icon = when (category) {
         "Alimentos" -> Icons.Default.Info
@@ -214,7 +206,7 @@ fun DonationCard(category: String, count: Int) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { /* detalle */ },
+            .clickable { onClick(category) },
         colors = CardDefaults.cardColors(containerColor = verdeFondo),
         elevation = CardDefaults.cardElevation(4.dp),
         shape = RoundedCornerShape(8.dp)
@@ -257,7 +249,10 @@ fun ProfileScreenPreview() {
         val navController = rememberNavController()
         ProfileScreen(
             navController = navController,
-            onEditClick = {}
+            onEditClick = {},
+            onBackClick = {},
+            onAddClick = {},
+            onDonationCardClick = {}
         )
     }
 }

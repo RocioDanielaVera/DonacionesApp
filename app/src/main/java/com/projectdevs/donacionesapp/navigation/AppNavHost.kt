@@ -19,6 +19,7 @@ import com.projectdevs.donacionesapp.ui.components.BottomAppBar
 import com.projectdevs.donacionesapp.ui.components.BottomNavItem
 import com.projectdevs.donacionesapp.ui.screens.DonationCreateScreen
 import com.projectdevs.donacionesapp.ui.screens.DonationDetailScreen
+import com.projectdevs.donacionesapp.ui.screens.DonationHistoryScreen
 import com.projectdevs.donacionesapp.ui.screens.DonationRequestsScreen
 import com.projectdevs.donacionesapp.ui.screens.EditProfileScreen
 import com.projectdevs.donacionesapp.ui.screens.HomeScreen
@@ -83,12 +84,35 @@ fun AppNavHost() {
             composable(BottomNavItem.Profile.route) {
                 ProfileScreen(
                     navController = navController,
-                    onEditClick = { navController.navigate("edit_profile")}
+                    onEditClick = { navController.navigate("edit_profile") },
+                    onBackClick = { navController.navigate("home") },
+                    onAddClick = { navController.navigate("postScreen") },
+                    onDonationCardClick = { category ->
+                        navController.navigate("donation_history/$category")
+                    }
                 )
             }
 
             composable("edit_profile") {
                 EditProfileScreen(navController = navController)
+            }
+
+            composable(
+                route = "donation_history/{category}",
+                arguments = listOf(
+                    navArgument("category") {
+                        type = NavType.StringType
+                    }
+                )
+            ) { backStackEntry ->
+                val category = backStackEntry.arguments?.getString("category") ?: "Error"
+
+
+                DonationHistoryScreen(
+                    navController = navController,
+                    category = category,
+                    onBackClick = { navController.popBackStack() }
+                )
             }
 
             composable(
