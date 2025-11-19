@@ -36,11 +36,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import com.projectdevs.donacionesapp.R
 import com.projectdevs.donacionesapp.domain.Donation
 
@@ -54,7 +52,7 @@ fun DonationDetailScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = {Text("Detalles de la donacion")},
+                title = { Text("Detalles de la donacion") },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Volver")
@@ -82,7 +80,7 @@ fun DonationDetailScreen(
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
                 Button(
-                    onClick = { navController.navigate("chatScreen")},
+                    onClick = { navController.navigate("chatScreen") },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(50.dp),
@@ -124,7 +122,10 @@ fun DonationDetailScreen(
 
             Text(
                 "Descripción",
-                style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Medium, fontSize = 20.sp)
+                style = MaterialTheme.typography.titleSmall.copy(
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 20.sp
+                )
             )
             Text(
                 donation.description,
@@ -140,7 +141,10 @@ fun DonationDetailScreen(
 
             Text(
                 "Información del donador",
-                style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Medium, fontSize = 20.sp)
+                style = MaterialTheme.typography.titleSmall.copy(
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 20.sp
+                )
             )
 
             Row(
@@ -167,7 +171,10 @@ fun DonationDetailScreen(
 
             Text(
                 "Preferencias de entrega",
-                style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Medium, fontSize = 20.sp)
+                style = MaterialTheme.typography.titleSmall.copy(
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 20.sp
+                )
             )
             Text(
                 donation.deliveryPreference,

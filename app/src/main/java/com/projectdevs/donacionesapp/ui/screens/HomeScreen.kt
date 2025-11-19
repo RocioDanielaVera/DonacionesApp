@@ -83,7 +83,7 @@ fun HomeScreen(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = onAddClick,
-                containerColor = Color(0xFF74B895),
+                containerColor = MaterialTheme.colorScheme.primary,
                 shape = CircleShape
             ) {
                 Icon(Icons.Default.Add, contentDescription = "Agregar donación", tint = Color.White)
@@ -101,7 +101,7 @@ fun HomeScreen(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(Color(0xFF74B895))
+                    .background(Color(0xFF5ACE73))
                     .statusBarsPadding()
                     .padding(vertical = 16.dp, horizontal = 16.dp)
             ) {

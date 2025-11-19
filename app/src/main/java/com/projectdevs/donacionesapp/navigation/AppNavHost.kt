@@ -21,6 +21,7 @@ import com.projectdevs.donacionesapp.ui.screens.DonationDetailScreen
 import com.projectdevs.donacionesapp.ui.screens.DonationHistoryScreen
 import com.projectdevs.donacionesapp.ui.screens.DonationRequestsScreen
 import com.projectdevs.donacionesapp.ui.screens.EditProfileScreen
+import com.projectdevs.donacionesapp.ui.screens.ForumChatScreen
 import com.projectdevs.donacionesapp.ui.screens.HomeScreen
 import com.projectdevs.donacionesapp.ui.screens.LoginScreen
 import com.projectdevs.donacionesapp.ui.screens.PostScreen
@@ -50,9 +51,10 @@ fun AppNavHost() {
         ) {
             composable(Screen.Login.route) {
                 LoginScreen(navController = navController)
-
             }
-
+            composable("forumChatScreen"){
+                ForumChatScreen(navController = navController)
+            }
             composable("chatScreen"){
                 ChatScreen(navController = navController)
             }

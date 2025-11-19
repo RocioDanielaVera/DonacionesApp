@@ -62,8 +62,8 @@ fun LoginScreen(navController: NavController) {
         CustomTitle(title = stringResource(R.string.login_welcome_esp))
 
         Spacer(Modifier.height(10.dp))
-        //Descripción
-        CustomDefaultText(text = stringResource(R.string.login_welcome_description_esp))
+//        //Descripción
+//        CustomDefaultText(text = stringResource(R.string.login_welcome_description_esp))
 
         Spacer(Modifier.height(20.dp))
 
@@ -131,7 +131,7 @@ fun LoginScreen(navController: NavController) {
             color = MaterialTheme.colorScheme.primary,
             style = MaterialTheme.typography.titleMedium
         )
-        Spacer(Modifier.weight(1f))
+        Spacer(Modifier.height(130.dp))
         //Terminos
         Text(
             text = stringResource(R.string.Login_privacy_text_end_terms_esp),
