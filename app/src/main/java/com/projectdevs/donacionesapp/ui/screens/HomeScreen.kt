@@ -1,5 +1,7 @@
 package com.projectdevs.donacionesapp.ui.screens
 
+import android.R.attr.end
+import android.R.attr.text
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -20,14 +22,24 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.Chat
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Chat
 import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -45,6 +57,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -74,7 +87,7 @@ fun HomeScreen(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = onAddClick,
-                containerColor = MaterialTheme.colorScheme.primary,
+                containerColor = Color(0xFF4BB053),
                 shape = CircleShape
             ) {
                 Icon(Icons.Default.Add, contentDescription = "Agregar donación", tint = Color.White)
@@ -86,13 +99,12 @@ fun HomeScreen(
                 Modifier
                     .fillMaxSize()
                     .background(Color(0xFFFDFDFD))
-                    .padding(bottom = padding.calculateBottomPadding())
         ) {
             // HEADER
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(Color(0xFF5ACE73))
+                    .background(Color(0xFF5ACF74))
                     .statusBarsPadding()
                     .padding(vertical = 16.dp, horizontal = 16.dp)
             ) {
@@ -121,7 +133,7 @@ fun HomeScreen(
 
                     IconButton(onClick = {/* TODO Abrir mensajes */ }) {
                         Icon(
-                            imageVector = Icons.Default.Email,
+                            imageVector = Icons.AutoMirrored.Outlined.Chat,
                             contentDescription = "Mensajes",
                             tint = Color.White,
                             modifier = Modifier.size(28.dp)
@@ -141,22 +153,23 @@ fun HomeScreen(
                         onValueChange = {},
                         placeholder = "Buscar...",
                         modifier = Modifier
-                            .fillMaxWidth()
                             .weight(1f)
-                            .height(44.dp)
+                            .height(50.dp)
                     )
+
+                    Spacer(modifier = Modifier.width(8.dp))
 
                     Box(
                         modifier = Modifier
-                            .size(44.dp)
-                            .clip(CircleShape)
+                            .size(50.dp)
+                            .clip(shape = RoundedCornerShape(24.dp))
                             .background(Color.White)
                             .clickable { showFilterDialog = true },
                         contentAlignment = Alignment.Center,
 
                         ) {
                         Icon(
-                            Icons.Default.Menu,
+                            Icons.Default.FilterList,
                             contentDescription = "Filtros",
                             tint = Color(0xFF74B895)
                         )
@@ -167,10 +180,8 @@ fun HomeScreen(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 16.dp, horizontal = 16.dp)
+                    .padding(vertical = 2.dp, horizontal = 10.dp)
             ) {
-                Spacer(Modifier.height(8.dp))
-                Text("Categorias", style = MaterialTheme.typography.titleSmall)
                 Spacer(Modifier.height(8.dp))
                 CategoryButton (
                     categories = listOf("Gatronomia", "Indumentaria", "Electronica"),
@@ -203,7 +214,7 @@ fun HomeScreen(
                 }
             }
 
-            Spacer(Modifier.height(12.dp))
+            Spacer(Modifier.height(10.dp))
 
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),

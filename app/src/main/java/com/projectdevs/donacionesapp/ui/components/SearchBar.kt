@@ -33,7 +33,7 @@ fun SearchBar(
                 tint = Color.Gray
             ) },
         placeholder = { Text(placeholder, color = Color.Gray) },
-        modifier = Modifier.height(50.dp),
+        modifier = modifier,
         shape = RoundedCornerShape(24.dp),
         colors = OutlinedTextFieldDefaults.colors(
             focusedContainerColor = Color.White,
