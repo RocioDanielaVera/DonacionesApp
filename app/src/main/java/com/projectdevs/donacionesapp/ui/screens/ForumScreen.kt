@@ -6,9 +6,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Person
@@ -30,7 +32,8 @@ data class DonationRequest(
     val category: String,         // ej: "Alimentos", "Educación"
     val location: String,         // ej: "CABA", "Morón"
     val timestamp: Long,          // para "Recientes"
-    val distanceKm: Double? = null // para "Cercanía"
+    val distanceKm: Double? = null, // para "Cercanía"
+    val tags: List<String> = emptyList() // por si quiero mas etiquetas
 )
 
 // ----------------- PANTALLA -----------------
@@ -42,7 +45,7 @@ fun DonationRequestsScreen(
     onNavigateToCreate: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    // Estado base: lista mutable (podés agregar más items en runtime)
+    // Estado base: lista mutable
     val requests = remember { sampleRequests().toMutableStateList() }
 
     // Estado de filtros / orden
@@ -55,7 +58,7 @@ fun DonationRequestsScreen(
     val locationOptions = listOf("Todas", "La Matanza", "Morón", "CABA", "San Justo")
     var location by remember { mutableStateOf("Todas") }
 
-    // Lista filtrada + ordenada (recalcula solo cuando cambian dependencias)
+    // Lista filtrada + ordenada
     val filtered by remember(sort, category, location, requests) {
         derivedStateOf {
             requests
@@ -69,8 +72,9 @@ fun DonationRequestsScreen(
                             compareBy<DonationRequest> { it.distanceKm ?: Double.MAX_VALUE }
                                 .thenBy { it.title }
                         )
-                        "Urgencia"  -> seq.sortedBy { urgencyScore(it) } // menor = más urgente (ejemplo)
-                        else        -> seq
+
+                        "Urgencia" -> seq.sortedBy { urgencyScore(it) } // menor = más urgente (ejemplo)
+                        else -> seq
                     }
                 }
                 .toList()
@@ -81,7 +85,7 @@ fun DonationRequestsScreen(
         modifier = modifier.fillMaxSize(),
         topBar = {
             TopAppBar(
-                title = { Text("Solicitudes de donación") },
+                title = { Text("Donaciones") },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.Filled.ArrowBack, contentDescription = "Volver")
@@ -96,31 +100,9 @@ fun DonationRequestsScreen(
 //                onClick = { requests += randomRequest() },
                 onClick = onNavigateToCreate,
                 icon = { Icon(Icons.Filled.Add, contentDescription = null) },
-                text  = { Text("Agregar") }
+                text = { Text("Agregar") }
             )
         },
-//        bottomBar = {
-//            NavigationBar {
-//                NavigationBarItem(
-//                    selected = true,
-//                    onClick = { },
-//                    icon = { Icon(Icons.Filled.Home, contentDescription = "Inicio") },
-//                    label = { Text("Inicio") }
-//                )
-//                NavigationBarItem(
-//                    selected = false,
-//                    onClick = { },
-//                    icon = { Icon(Icons.Filled.List, contentDescription = "Solicitudes") },
-//                    label = { Text("Solicitudes") }
-//                )
-//                NavigationBarItem(
-//                    selected = false,
-//                    onClick = { },
-//                    icon = { Icon(Icons.Filled.Person, contentDescription = "Perfil") },
-//                    label = { Text("Perfil") }
-//                )
-//            }
-//        }
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -145,17 +127,16 @@ fun DonationRequestsScreen(
                 onLocationChange = { location = it },
                 locationOptions = locationOptions,
                 modifier = Modifier
-                    .fillMaxWidth()
                     .padding(horizontal = 16.dp)
             )
 
             // --- Contador de resultados ---
-            Text(
-                text = "${filtered.size} solicitudes",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp)
-            )
+//            Text(
+//                text = "${filtered.size} solicitudes",
+//                style = MaterialTheme.typography.bodySmall,
+//                color = MaterialTheme.colorScheme.onSurfaceVariant,
+//                modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp)
+//            )
 
             Divider()
 
@@ -227,7 +208,6 @@ private fun FilterBar(
 
     Column(
         modifier = modifier
-            .navigationBarsPadding()
             .padding(bottom = 6.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
@@ -246,28 +226,42 @@ private fun FilterBar(
         }
 
         // Chips (abren sheets)
-        FlowRow(
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            FilterChip(
-                selected = category != "Todas",
-                onClick = { showCategorySheet = true },
-                label = { Text(if (category == "Todas") "Categoría" else "Categoría: $category") }
-            )
-            FilterChip(
-                selected = location != "Todas",
-                onClick = { showLocationSheet = true },
-                label = { Text(if (location == "Todas") "Localidad" else "Localidad: $location") }
-            )
-            if (category != "Todas" || location != "Todas") {
-                AssistChip(
-                    onClick = {
-                        onCategoryChange("Todas")
-                        onLocationChange("Todas")
-                    },
-                    label = { Text("Limpiar filtros") }
+            FlowRow(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier.weight(1f)
+            ) {
+                FilterChip(
+                    selected = category != "Todas",
+                    onClick = { showCategorySheet = true },
+                    label = { Text(if (category == "Todas") "Categoría" else "$category") }
                 )
+                FilterChip(
+                    selected = location != "Todas",
+                    onClick = { showLocationSheet = true },
+                    label = { Text(if (location == "Todas") "Localidad" else "$location") }
+                )
+
+
+                if (category != "Todas" || location != "Todas") {
+                    IconButton(
+                        onClick = {
+                            onCategoryChange("Todas")
+                            onLocationChange("Todas")
+                        }
+                    ) {
+                        Icon(
+                            Icons.Default.Delete,
+                            contentDescription = "Limpiar filtros",
+                            tint = MaterialTheme.colorScheme.error
+                        )
+                    }
+                }
             }
         }
     }
@@ -337,30 +331,96 @@ private fun SelectionSheet(
 
 // CARD
 @Composable
-private fun DonationCard(
+fun DonationCard(
     request: DonationRequest,
     onSelect: () -> Unit,
+    onSeeMore: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     ElevatedCard(
         modifier = modifier
             .fillMaxWidth()
-            .animateContentSize(),
+            .animateContentSize()
     ) {
         Column(
             modifier = Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp)
+            verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text(
-                    text = request.title,
-                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-                AssistChipRow(chips = listOf(request.category, request.location))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    // Avatar
+                    Surface(
+                        shape = CircleShape,
+                        color = MaterialTheme.colorScheme.primary.copy(alpha = 0.08f),
+                        modifier = Modifier.size(40.dp)
+                    ) {
+                        Box(contentAlignment = Alignment.Center) {
+                            Text(
+                                text = request.title.firstOrNull()?.uppercase() ?: "",
+                                style = MaterialTheme.typography.titleMedium,
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        }
+                    }
+
+                    Column {
+                        Text(
+                            text = request.title,
+                            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+
+                        if (request.location.isNotBlank()) {
+                            Text(
+                                text = request.location,
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                        }
+                    }
+                }
+
+                OutlinedButton(onClick = onSelect) {
+                    Text("Seleccionar")
+                }
             }
 
+            //o etiquetas
+            FlowRow(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                AssistChip(
+                    onClick = { },
+                    enabled = false,
+                    label = { Text(request.category) }
+                )
+                AssistChip(
+                    onClick = { },
+                    enabled = false,
+                    label = { Text(request.location) }
+                )
+
+                request.tags.forEach { tag ->
+                    AssistChip(
+                        onClick = { },
+                        enabled = false,
+                        label = { Text(tag) }
+                    )
+                }
+            }
+
+            // Descripción
             Text(
                 text = request.summary,
                 style = MaterialTheme.typography.bodyMedium,
@@ -368,12 +428,18 @@ private fun DonationCard(
                 overflow = TextOverflow.Ellipsis
             )
 
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-                FilledTonalButton(onClick = onSelect) { Text("Seleccionar") }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.End
+            ) {
+                TextButton(onClick = onSeeMore) {
+                    Text("Ver más")
+                }
             }
         }
     }
 }
+
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -410,7 +476,7 @@ private fun sampleRequests(): List<DonationRequest> = listOf(
     ),
     DonationRequest(
         id = "3",
-        title = "Centro de Salud Comunitario",
+        title = "Centro de Salud",
         summary = "Gasas, alcohol, guantes y barbijos. También aceptamos donaciones económicas.",
         category = "Salud",
         location = "CABA",
@@ -449,7 +515,9 @@ private fun randomRequest(): DonationRequest {
 @Preview(showBackground = true, widthDp = 390, heightDp = 844)
 @Composable
 private fun DonationRequestsScreenPreview() {
-    MaterialTheme { DonationRequestsScreen(
-        onNavigateToCreate = { },
-    ) }
+    MaterialTheme {
+        DonationRequestsScreen(
+            onNavigateToCreate = { },
+        )
+    }
 }
