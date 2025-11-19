@@ -15,6 +15,7 @@ import androidx.navigation.navArgument
 import com.projectdevs.donacionesapp.domain.donaciones
 import com.projectdevs.donacionesapp.ui.components.BottomAppBar
 import com.projectdevs.donacionesapp.ui.components.BottomNavItem
+import com.projectdevs.donacionesapp.ui.screens.ChatScreen
 import com.projectdevs.donacionesapp.ui.screens.DonationCreateScreen
 import com.projectdevs.donacionesapp.ui.screens.DonationDetailScreen
 import com.projectdevs.donacionesapp.ui.screens.DonationHistoryScreen
@@ -51,6 +52,11 @@ fun AppNavHost() {
                 LoginScreen(navController = navController)
 
             }
+
+            composable("chatScreen"){
+                ChatScreen(navController = navController)
+            }
+
             composable("postScreen") {
                 PostScreen(
                     onBackClick = {navController.popBackStack(Screen.Home.route, inclusive = false)},
@@ -121,7 +127,8 @@ fun AppNavHost() {
                 val donation = donaciones.find { it.id == donationId }!!
                 DonationDetailScreen(
                     donation = donation,
-                    onBackClick = {navController.popBackStack()}
+                    onBackClick = {navController.popBackStack()},
+                    navController = navController
                 )
             }
         }

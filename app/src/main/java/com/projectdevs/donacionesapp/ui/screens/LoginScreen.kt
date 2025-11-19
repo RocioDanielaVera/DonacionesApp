@@ -111,7 +111,7 @@ fun LoginScreen(navController: NavController) {
         CustomButton(
             value = stringResource(R.string.login_text_button_esp),
             enabled = enabledButton,
-            navigateToHomeScreen = {
+            navigateToScreen = {
                 navController.navigate(BottomNavItem.Home.route)
             }
         )
