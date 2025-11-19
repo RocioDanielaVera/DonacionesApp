@@ -147,7 +147,9 @@ fun DonationDetailScreen(
             )
 
             Card(
-                onClick = { /*TODO navegar a perfil*/  },
+                onClick = {
+
+                },
                 shape = RoundedCornerShape(12.dp),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -227,11 +229,12 @@ fun DonationDetailScreen(
     }
 }
 
-@Preview
-@Composable
-fun DonationDetailScreenPreview(){
-    DonationDetailScreen(
-        donation = Donation(1, "Comida", "Donación de alimentos no perecederos", "Ulises", ""),
-        onBackClick = {},
-        )
-}
+//@Preview
+//@Composable
+//fun DonationDetailScreenPreview(){
+//    DonationDetailScreen(
+//        donation = Donation(1, "Comida", "Donación de alimentos no perecederos", "Ulises", ""),
+//        onBackClick = {},
+//        navController =
+//        )
+//}
