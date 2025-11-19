@@ -33,14 +33,14 @@ fun FilterOption(
     ) {
         Text(
             text = text,
-            color = if (isSelected) Color(0xFF74B895) else Color.Black,
+            color = if (isSelected) Color(0xFF5ACF74) else Color.Black,
             fontWeight = if (isSelected) FontWeight.Medium else FontWeight.Normal
         )
         if (isSelected) {
             Icon(
                 imageVector = Icons.Default.Check,
                 contentDescription = null,
-                tint = Color(0xFF74B895)
+                tint = Color(0xFF5ACF74)
             )
         }
     }

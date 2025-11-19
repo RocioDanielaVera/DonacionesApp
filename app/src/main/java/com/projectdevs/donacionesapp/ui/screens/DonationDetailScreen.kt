@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -17,8 +18,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -36,6 +40,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -46,19 +51,19 @@ import com.projectdevs.donacionesapp.domain.Donation
 @Composable
 fun DonationDetailScreen(
     donation: Donation,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
 ) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = {Text("Detalles de la donacion")},
+                title = {Text("Detalles de la publicación")},
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Volver")
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color(0xFF74B895),
+                    containerColor = Color(0xFF5ACF74),
                     titleContentColor = Color.White,
                     navigationIconContentColor = Color.White
                 )
@@ -68,7 +73,6 @@ fun DonationDetailScreen(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(Color.White)
                     .padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -85,7 +89,7 @@ fun DonationDetailScreen(
                         .height(50.dp),
                     shape = RoundedCornerShape(25.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFF74B895)
+                        containerColor = Color(0xFF4BB053)
                     )
                 ) {
                     Text("Solicitar", color = Color.White)
@@ -136,23 +140,67 @@ fun DonationDetailScreen(
             )
 
             Text(
-                "Información del donador",
+                "Información del donante",
                 style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Medium, fontSize = 20.sp)
             )
 
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(top = 8.dp)
+            Card(
+                onClick = { /*TODO navegar a perfil*/  },
+                shape = RoundedCornerShape(12.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
             ) {
-                Box(
+                Row(
                     modifier = Modifier
-                        .size(40.dp)
-                        .clip(CircleShape)
-                        .background(Color(0xFFD9D9D9))
-                )
-                Spacer(Modifier.width(8.dp))
-                Column {
-                    Text(donation.donorName, fontWeight = FontWeight.SemiBold)
+                        .background(Color.Transparent)
+                        .padding(5.dp, vertical = 10.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(45.dp)
+                            .clip(CircleShape)
+                            .background(Color(0xFFD9D9D9))
+                    )
+
+                    Spacer(Modifier.width(12.dp))
+
+                    Column(
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = donation.donorName,
+                                fontWeight = FontWeight.SemiBold,
+                                fontSize = 16.sp
+                            )
+
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Icon(
+                                Icons.Default.Star,
+                                contentDescription = "Rango",
+                                tint = Color(0xFFFFD700),
+                                modifier = Modifier
+                                    .size(15.dp)
+                                    .offset(y = (-2).dp)
+                            )
+                        }
+                            Text(
+                                text = "Ver perfil",
+                                color = Color.Gray,
+                                fontSize = 13.sp,
+                                textDecoration = TextDecoration.Underline
+                            )
+                    }
+
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                        contentDescription = "ir al perfil",
+                        tint = Color.Gray,
+                        modifier = Modifier.size(20.dp)
+                    )
                 }
             }
 
@@ -183,5 +231,5 @@ fun DonationDetailScreenPreview(){
     DonationDetailScreen(
         donation = Donation(1, "Comida", "Donación de alimentos no perecederos", "Ulises", ""),
         onBackClick = {},
-    )
+        )
 }

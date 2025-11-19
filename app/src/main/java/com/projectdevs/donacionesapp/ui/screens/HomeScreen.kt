@@ -24,10 +24,14 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.Chat
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Chat
 import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Person
@@ -83,7 +87,7 @@ fun HomeScreen(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = onAddClick,
-                containerColor = Color(0xFF74B895),
+                containerColor = Color(0xFF4BB053),
                 shape = CircleShape
             ) {
                 Icon(Icons.Default.Add, contentDescription = "Agregar donación", tint = Color.White)
@@ -95,13 +99,12 @@ fun HomeScreen(
                 Modifier
                     .fillMaxSize()
                     .background(Color(0xFFFDFDFD))
-                    .padding(bottom = padding.calculateBottomPadding())
         ) {
             // HEADER
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(Color(0xFF74B895))
+                    .background(Color(0xFF5ACF74))
                     .statusBarsPadding()
                     .padding(vertical = 16.dp, horizontal = 16.dp)
             ) {
@@ -130,7 +133,7 @@ fun HomeScreen(
 
                     IconButton(onClick = {/* TODO Abrir mensajes */ }) {
                         Icon(
-                            imageVector = Icons.Default.Email,
+                            imageVector = Icons.AutoMirrored.Outlined.Chat,
                             contentDescription = "Mensajes",
                             tint = Color.White,
                             modifier = Modifier.size(28.dp)
@@ -150,22 +153,23 @@ fun HomeScreen(
                         onValueChange = {},
                         placeholder = "Buscar...",
                         modifier = Modifier
-                            .fillMaxWidth()
                             .weight(1f)
-                            .height(44.dp)
+                            .height(50.dp)
                     )
+
+                    Spacer(modifier = Modifier.width(8.dp))
 
                     Box(
                         modifier = Modifier
-                            .size(44.dp)
-                            .clip(CircleShape)
+                            .size(50.dp)
+                            .clip(shape = RoundedCornerShape(24.dp))
                             .background(Color.White)
                             .clickable { showFilterDialog = true },
                         contentAlignment = Alignment.Center,
 
                         ) {
                         Icon(
-                            Icons.Default.Menu,
+                            Icons.Default.FilterList,
                             contentDescription = "Filtros",
                             tint = Color(0xFF74B895)
                         )
@@ -176,10 +180,8 @@ fun HomeScreen(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 16.dp, horizontal = 16.dp)
+                    .padding(vertical = 2.dp, horizontal = 10.dp)
             ) {
-                Spacer(Modifier.height(8.dp))
-                Text("Categorias", style = MaterialTheme.typography.titleSmall)
                 Spacer(Modifier.height(8.dp))
                 CategoryButton (
                     categories = listOf("Gatronomia", "Indumentaria", "Electronica"),
@@ -212,7 +214,7 @@ fun HomeScreen(
                 }
             }
 
-            Spacer(Modifier.height(12.dp))
+            Spacer(Modifier.height(10.dp))
 
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
