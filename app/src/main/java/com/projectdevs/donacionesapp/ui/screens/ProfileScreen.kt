@@ -13,8 +13,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Star
@@ -137,7 +135,7 @@ fun ProfileContent(
             Spacer(modifier = Modifier.height(12.dp))
             Column(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally // Centra la Row
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically
@@ -180,11 +178,11 @@ fun ProfileContent(
             // Lista de donaciones
             LazyColumn {
                 items(finalDonationsList) { (category, count) ->
-                    // 💡 Nuevo: Pasamos la acción al componente DonationCard
+
                     DonationCard(
                         category,
                         count,
-                        onClick = onDonationCardClick // Pasamos la lambda de navegación
+                        onClick = onDonationCardClick
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                 }

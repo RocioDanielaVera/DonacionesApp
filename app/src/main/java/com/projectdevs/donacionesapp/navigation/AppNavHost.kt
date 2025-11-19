@@ -1,8 +1,6 @@
 package com.projectdevs.donacionesapp.ui.navigation
 
-import android.R.attr.type
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue

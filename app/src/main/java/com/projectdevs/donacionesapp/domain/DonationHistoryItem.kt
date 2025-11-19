@@ -4,12 +4,11 @@ data class DonationHistoryItem(
     val id: Int,
     val nombre: String,
     val fecha: String,
-    val categoria: String, // 💡 Necesario para el filtrado en DonationHistoryScreen
+    val categoria: String,
     val estado: String,
     val receptor: String
 )
 
-// Y una lista de prueba para el historial
 val historialDonaciones = listOf(
     DonationHistoryItem(101, "Alimentos Varios", "12/09/2025", "Alimentos", "Finalizada","Juan Perez"),
     DonationHistoryItem(102, "Televisor antiguo", "05/08/2025", "Electrodomésticos", "Finalizada","Juan Perez"),
