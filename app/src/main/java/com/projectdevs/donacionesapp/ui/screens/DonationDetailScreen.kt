@@ -44,6 +44,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.projectdevs.donacionesapp.R
 import com.projectdevs.donacionesapp.domain.Donation
 
@@ -52,6 +53,7 @@ import com.projectdevs.donacionesapp.domain.Donation
 fun DonationDetailScreen(
     donation: Donation,
     onBackClick: () -> Unit,
+    navController: NavController,
 ) {
     Scaffold(
         topBar = {
@@ -83,7 +85,7 @@ fun DonationDetailScreen(
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
                 Button(
-                    onClick = { /*TODO Solicitar donacion*/},
+                    onClick = { navController.navigate("chatScreen")},
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(50.dp),
@@ -225,11 +227,11 @@ fun DonationDetailScreen(
     }
 }
 
-@Preview
-@Composable
-fun DonationDetailScreenPreview(){
-    DonationDetailScreen(
-        donation = Donation(1, "Comida", "Donación de alimentos no perecederos", "Ulises", ""),
-        onBackClick = {},
-        )
-}
+//@Preview
+//@Composable
+//fun DonationDetailScreenPreview(){
+//    DonationDetailScreen(
+//        donation = Donation(1, "Comida", "Donación de alimentos no perecederos", "Ulises", ""),
+//        onBackClick = {},
+//        )
+//}

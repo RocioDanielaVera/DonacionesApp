@@ -40,7 +40,7 @@ fun BottomAppBar(
     NavigationBar (
         containerColor = Color.White,
         tonalElevation = 4.dp,
-        modifier = Modifier.height(70.dp)
+        modifier = Modifier.height(150.dp)
     ) {
         items.forEach { item ->
             val selected = currentDestination == item.route
