@@ -1,23 +1,25 @@
 package com.projectdevs.donacionesapp.ui.screens
 
 import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.List
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -27,13 +29,20 @@ import kotlin.random.Random
 // ----------------- MODELO -----------------
 data class DonationRequest(
     val id: String,
-    val title: String,
-    val summary: String,
-    val category: String,         // ej: "Alimentos", "Educación"
-    val location: String,         // ej: "CABA", "Morón"
-    val timestamp: Long,          // para "Recientes"
-    val distanceKm: Double? = null, // para "Cercanía"
-    val tags: List<String> = emptyList() // por si quiero mas etiquetas
+    val title: String,              // Ej: "Comedor Sandra"
+    val summary: String,            // Lo que se necesita (corto)
+    val category: String,
+    val location: String,
+
+    val quantity: Int? = null,      // Cantidad solicitada
+    val condition: String? = null,  // "Nuevo", "Usado", "Ninguno"
+    val urgency: String? = null,    // "Alta", "Media", "Baja"
+
+    val fullDescription: String? = null, // Texto largo
+    val tags: List<String> = emptyList(),
+
+    val timestamp: Long,
+    val distanceKm: Double?
 )
 
 // ----------------- PANTALLA -----------------
@@ -83,14 +92,15 @@ fun DonationRequestsScreen(
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
+        containerColor = Color(0xFFF5F8F6),
         topBar = {
             TopAppBar(
-                title = { Text("Donaciones") },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.Filled.ArrowBack, contentDescription = "Volver")
-                    }
-                }
+                title = { Text("Pedidos de Donaciones") },
+//                navigationIcon = {
+//                    IconButton(onClick = onBack) {
+//                        Icon(Icons.Filled.ArrowBack, contentDescription = "Volver")
+//                    }
+//                }
             )
         },
         floatingActionButton = {
@@ -100,8 +110,10 @@ fun DonationRequestsScreen(
 //                onClick = { requests += randomRequest() },
                 onClick = onNavigateToCreate,
                 icon = { Icon(Icons.Filled.Add, contentDescription = null) },
-                text = { Text("Agregar") },
-                containerColor = MaterialTheme.colorScheme.primary
+                text = { Text("Nuevo Pedido") },
+//                containerColor = Color(0xFF4BB053),
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = Color.Black
             )
         },
     ) { innerPadding ->
@@ -166,7 +178,7 @@ fun DonationRequestsScreen(
                     items(filtered, key = { it.id }) { req ->
                         DonationCard(
                             request = req,
-                            onSelect = { onSelectRequest(req) }
+                            onContact = { /* pantalla de navegación */ }
                         )
                     }
                 }
@@ -221,7 +233,13 @@ private fun FilterBar(
                     selected = sort == option,
                     onClick = { onSortChange(option) },
                     shape = SegmentedButtonDefaults.itemShape(index, sortOptions.size),
-                    label = { Text(option, maxLines = 1) }
+                    label = { Text(option, maxLines = 1) },
+                    colors = SegmentedButtonDefaults.colors(
+                        activeContainerColor = Color(0xFF4BB053),
+                        activeContentColor = Color.Black,
+                        inactiveContainerColor = MaterialTheme.colorScheme.surface,
+                        inactiveContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
                 )
             }
         }
@@ -334,110 +352,216 @@ private fun SelectionSheet(
 @Composable
 fun DonationCard(
     request: DonationRequest,
-    onSelect: () -> Unit,
-    onSeeMore: () -> Unit = {},
+    onContact: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    ElevatedCard(
-        modifier = modifier
+    var expanded by remember { mutableStateOf(false) }
+
+    Box(
+        modifier = Modifier
             .fillMaxWidth()
-            .animateContentSize()
+            .border(
+                width = 1.dp,
+                color = Color(0xFFE0F2E9),
+                shape = RoundedCornerShape(12.dp)
+            )
     ) {
-        Column(
-            modifier = Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ElevatedCard(
+            modifier = modifier
+                .fillMaxWidth()
+                .animateContentSize()
+                .clickable { expanded = !expanded },
+            colors = CardDefaults.elevatedCardColors(
+                containerColor = Color(0xFFFDFDFD),
+            ),
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+            Column(
+                modifier = Modifier.padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
+                if (!request.urgency.isNullOrBlank()) {
+                    UrgencyChip(request.urgency)
+                }
+
+                Text(
+                    text = request.summary,
+                    style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Medium),
+                    maxLines = if (expanded) Int.MAX_VALUE else 3,
+                    overflow = TextOverflow.Ellipsis
+                )
+
                 Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    // Avatar
-                    Surface(
-                        shape = CircleShape,
-                        color = MaterialTheme.colorScheme.primary.copy(alpha = 0.08f),
-                        modifier = Modifier.size(40.dp)
+
+                    // Usuario
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
-                        Box(contentAlignment = Alignment.Center) {
-                            Text(
-                                text = request.title.firstOrNull()?.uppercase() ?: "",
-                                style = MaterialTheme.typography.titleMedium,
-                                color = MaterialTheme.colorScheme.primary
-                            )
+                        Surface(
+                            shape = CircleShape,
+                            color = Color(0xFF2E7D32).copy(alpha = 0.12f),
+                            modifier = Modifier.size(40.dp)
+                        ) {
+                            Box(contentAlignment = Alignment.Center) {
+                                Text(
+                                    text = request.title.firstOrNull()?.uppercase() ?: "",
+                                    style = MaterialTheme.typography.titleMedium,
+                                    color = Color(0xFF003366)
+                                )
+                            }
                         }
-                    }
 
-                    Column {
-                        Text(
-                            text = request.title,
-                            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
-                        )
-
-                        if (request.location.isNotBlank()) {
+                        Column {
                             Text(
-                                text = request.location,
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                text = request.title,
+                                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis
                             )
+                            if (request.location.isNotBlank()) {
+                                Text(
+                                    text = request.location,
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis
+                                )
+                            }
+                        }
+                    }
+
+                    // Botón Contactar
+                    OutlinedButton(
+                        onClick = onContact,
+                        colors = ButtonDefaults.outlinedButtonColors(
+                            contentColor = Color(0xFF2E7D32)
+                        ),
+                        border = BorderStroke(
+                            width = 1.dp,
+                            color = Color(0xFF2E7D32)
+                        )
+                    ) {
+                        Text("Contactar")
+                    }
+                }
+
+                // cantidad, descripción larga
+                if (expanded) {
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(6.dp),
+                        modifier = Modifier.padding(top = 4.dp)
+                    ) {
+                        if (request.quantity != null) {
+                            Text(
+                                text = "Cantidad: ${request.quantity}",
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                        }
+                        if (!request.condition.isNullOrBlank()) {
+                            Text(
+                                text = "Estado: ${request.condition}",
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                        }
+                        val full = request.fullDescription
+                        if (!full.isNullOrBlank()) {
+                            Text(
+                                text = full,
+                                style = MaterialTheme.typography.bodyMedium
+                            )
                         }
                     }
                 }
 
-                OutlinedButton(onClick = onSelect) {
-                    Text("Seleccionar")
-                }
-            }
-
-            //o etiquetas
-            FlowRow(
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                AssistChip(
-                    onClick = {
-                    },
-                    enabled = false,
-                    label = { Text(request.category) }
-                )
-                AssistChip(
-                    onClick = { },
-                    enabled = false,
-                    label = { Text(request.location) }
-                )
-
-                request.tags.forEach { tag ->
+                FlowRow(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
                     AssistChip(
-                        onClick = { },
+                        onClick = {},
                         enabled = false,
-                        label = { Text(tag) }
+                        label = { Text(request.category) }
                     )
+                    AssistChip(
+                        onClick = {},
+                        enabled = false,
+                        label = { Text(request.location) }
+                    )
+                    request.tags.forEach { tag ->
+                        AssistChip(
+                            onClick = {},
+                            enabled = false,
+                            label = { Text(tag) }
+                        )
+                    }
                 }
-            }
 
-            // Descripción
-            Text(
-                text = request.summary,
-                style = MaterialTheme.typography.bodyMedium,
-                maxLines = 3,
-                overflow = TextOverflow.Ellipsis
+//            Row(
+//                modifier = Modifier.fillMaxWidth(),
+//                horizontalArrangement = Arrangement.End
+//            ) {
+//                TextButton(onClick = { expanded = !expanded }) {
+//                    Text(if (expanded) "Ver menos" else "Ver más")
+//                }
+//            }
+            }
+        }
+    }
+}
+
+@Composable
+private fun UrgencyChip(urgency: String) {
+    val (bg, fg, label) = when (urgency.lowercase()) {
+        "alta" -> Triple(
+            Color(0xFFFFEBEE),
+            Color(0xFFD32F2F),
+            "Alta urgencia"
+        )
+
+        "media" -> Triple(
+            Color(0xFFFFF8E1),
+            Color(0xFFF9A825),
+            "Urgencia media"
+        )
+
+        "baja" -> Triple(
+            Color(0xFFE8F5E9),
+            Color(0xFF2E7D32),
+            "Urgencia baja"
+        )
+
+        else -> Triple(
+            MaterialTheme.colorScheme.surfaceVariant,
+            MaterialTheme.colorScheme.onSurfaceVariant,
+            urgency
+        )
+    }
+
+    Surface(
+        color = bg,
+        contentColor = fg,
+        shape = RoundedCornerShape(50),
+        modifier = Modifier
+            .heightIn(min = 24.dp)
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(6.dp),
+            modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(8.dp)
+                    .background(fg, CircleShape)
             )
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.End
-            ) {
-                TextButton(onClick = onSeeMore) {
-                    Text("Ver más")
-                }
-            }
+            Text(
+                text = label,
+                style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Medium)
+            )
         }
     }
 }
@@ -451,7 +575,15 @@ private fun AssistChipRow(chips: List<String>) {
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         chips.forEach { label ->
-            AssistChip(onClick = {}, enabled = false, label = { Text(label) })
+            AssistChip(
+                onClick = {},
+                enabled = false,
+                label = { Text(label) },
+                border = BorderStroke(1.dp, Color(0xFF2E7D32)),
+                colors = AssistChipDefaults.assistChipColors(
+                    labelColor = Color(0xFF2E7D32)
+                ),
+            )
         }
     }
 }
@@ -461,37 +593,57 @@ private fun sampleRequests(): List<DonationRequest> = listOf(
     DonationRequest(
         id = "1",
         title = "Comedor Sandra",
-        summary = "Alimentos no perecederos para 40 familias. Prioridad: leche, aceite, fideos y arroz.",
+        summary = "Alimentos no perecederos para 40 familias.",
         category = "Alimentos",
         location = "San Justo",
-        timestamp = System.currentTimeMillis() - 60_000L, // hace 1 min
+        quantity = 40,
+        condition = "Ninguno",
+        urgency = "Alta",
+        fullDescription = "Necesitamos alimentos no perecederos para abastecer a 40 familias durante el mes. Prioridad: leche en polvo, aceite, fideos, arroz y conservas.",
+        tags = listOf("Urgente", "Comunidad"),
+        timestamp = System.currentTimeMillis() - 60_000L,
         distanceKm = 3.2
     ),
     DonationRequest(
         id = "2",
         title = "Escuela Primaria 103",
-        summary = "Campaña de útiles: cuadernos, lápices, repuestos A4 y mochilas.",
+        summary = "Campaña de útiles: cuadernos, lápices y mochilas.",
         category = "Educación",
         location = "Morón",
-        timestamp = System.currentTimeMillis() - 3_600_000L, // hace 1 h
+        quantity = 25,
+        condition = "Nuevo",
+        urgency = "Media",
+        fullDescription = "La escuela está organizando una campaña para alumnos de bajos recursos. Se buscan útiles escolares: cuadernos de tapa dura, lápices, repuestos A4 y mochilas resistentes.",
+        tags = listOf("Niños", "Educación"),
+        timestamp = System.currentTimeMillis() - 3_600_000L,
         distanceKm = 8.7
     ),
     DonationRequest(
         id = "3",
         title = "Centro de Salud",
-        summary = "Gasas, alcohol, guantes y barbijos. También aceptamos donaciones económicas.",
+        summary = "Gasas, alcohol, guantes y barbijos.",
         category = "Salud",
         location = "CABA",
-        timestamp = System.currentTimeMillis() - 86_400_000L, // ayer
+        quantity = null,
+        condition = "Nuevo",
+        urgency = "Alta",
+        fullDescription = "El centro de salud está con faltante crítico de insumos básicos. Se necesitan gasas estériles, alcohol 70°, guantes descartables y barbijos quirúrgicos.",
+        tags = listOf("Urgencia"),
+        timestamp = System.currentTimeMillis() - 86_400_000L,
         distanceKm = 15.4
     ),
     DonationRequest(
         id = "4",
         title = "Ropero Comunitario",
-        summary = "Ropa de abrigo para adultos y niños. Botas y frazadas suman mucho.",
+        summary = "Ropa de abrigo para adultos y niños.",
         category = "Ropa",
         location = "La Matanza",
-        timestamp = System.currentTimeMillis() - 5_000L, // muy reciente
+        quantity = 30,
+        condition = "Usado",
+        urgency = "Baja",
+        fullDescription = "Se necesitan camperas, buzos, pantalones térmicos y frazadas para adultos y niños. También aceptamos botas, guantes y gorros de invierno.",
+        tags = listOf("Invierno"),
+        timestamp = System.currentTimeMillis() - 5_000L,
         distanceKm = 1.1
     )
 )

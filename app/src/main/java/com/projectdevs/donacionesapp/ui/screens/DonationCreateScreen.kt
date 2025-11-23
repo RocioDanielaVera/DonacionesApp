@@ -50,6 +50,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
@@ -82,7 +83,7 @@ fun DonationCreateScreen(
     val focus = LocalFocusManager.current
 
     val categories = listOf("Alimentos", "Ropa", "Educación", "Salud")
-    val locations  = listOf("Florencio Varela 1903", "San Justo", "Morón", "CABA")
+    val locations  = listOf("San Justo", "Morón", "CABA")
 
     var category by remember { mutableStateOf<String?>(null) }
     var location by remember { mutableStateOf<String?>(null) }
@@ -109,6 +110,7 @@ fun DonationCreateScreen(
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
+        containerColor = Color(0xFFF5F8F6),
         topBar = {
             TopAppBar(
                 title = { Text("Solicitar Donación") },
@@ -132,30 +134,6 @@ fun DonationCreateScreen(
                     .padding(horizontal = 16.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-
-                LabeledPicker(
-                    label = "Categoría",
-                    value = category ?: "Seleccionar",
-                    leadingIcon = {
-                        Icon(
-                            categoryIcon(category),
-                            contentDescription = "Categoría seleccionada"
-                        )
-                    },
-                    onClick = { showCategorySheet = true },
-                    isError = !categoryValid && category != null
-                )
-
-                LabeledPicker(
-                    label = "Localidad / Dirección",
-                    value = location ?: "Seleccionar",
-                    leadingIcon = {
-                        Icon(Icons.Default.EditLocationAlt, contentDescription = null)
-                    },
-                    onClick = { showLocationSheet = true },
-                    isError = !locationValid && location != null
-                )
-
                 OutlinedTextField(
                     value = title,
                     onValueChange = { if (it.length <= 60) title = it },
@@ -175,39 +153,28 @@ fun DonationCreateScreen(
                     modifier = Modifier.fillMaxWidth()
                 )
 
-                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                    Text(
-                        text = "Descripción",
-                        style = MaterialTheme.typography.titleSmall
-                    )
-                    Text(
-                        text = "Agregue una breve descripción del artículo a solicitar. Será lo primero que verán posibles donantes cercanos a tu ubicación.",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                    OutlinedTextField(
-                        value = description,
-                        onValueChange = { if (it.length <= 120) description = it },
-                        placeholder = { Text("Descripción") },
-                        minLines = 4,
-                        maxLines = 6,
-                        isError = description.isNotEmpty() && !descValid,
-                        supportingText = {
-                            val msg = if (description.isNotEmpty() && !descValid)
-                                "Máx. 120 caracteres"
-                            else "${description.length}/120 caracteres"
-                            Text(msg)
-                        },
-                        keyboardOptions = KeyboardOptions(
-                            capitalization = KeyboardCapitalization.Sentences,
-                            keyboardType = KeyboardType.Text,
-                            imeAction = ImeAction.Next
-                        ),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .heightIn(min = 120.dp)
-                    )
-                }
+                LabeledPicker(
+                    label = "Categoría",
+                    value = category ?: "Seleccionar",
+                    leadingIcon = {
+                        Icon(
+                            categoryIcon(category),
+                            contentDescription = "Categoría seleccionada"
+                        )
+                    },
+                    onClick = { showCategorySheet = true },
+                    isError = !categoryValid && category != null
+                )
+
+                LabeledPicker(
+                    label = "Localidad",
+                    value = location ?: "Seleccionar",
+                    leadingIcon = {
+                        Icon(Icons.Default.EditLocationAlt, contentDescription = null)
+                    },
+                    onClick = { showLocationSheet = true },
+                    isError = !locationValid && location != null
+                )
 
                 // --------- CANTIDAD ----------
                 Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -267,6 +234,40 @@ fun DonationCreateScreen(
                         value = urgency ?: "Nivel de urgencia",
                         options = listOf("Baja", "Media", "Alta"),
                         onValueChange = { urgency = it }
+                    )
+                }
+
+                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Text(
+                        text = "Descripción",
+                        style = MaterialTheme.typography.titleSmall
+                    )
+                    Text(
+                        text = "Agregue una breve descripción del artículo a solicitar. Será lo primero que verán posibles donantes cercanos a tu ubicación.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    OutlinedTextField(
+                        value = description,
+                        onValueChange = { if (it.length <= 120) description = it },
+                        placeholder = { Text("Descripción") },
+                        minLines = 4,
+                        maxLines = 6,
+                        isError = description.isNotEmpty() && !descValid,
+                        supportingText = {
+                            val msg = if (description.isNotEmpty() && !descValid)
+                                "Máx. 120 caracteres"
+                            else "${description.length}/120 caracteres"
+                            Text(msg)
+                        },
+                        keyboardOptions = KeyboardOptions(
+                            capitalization = KeyboardCapitalization.Sentences,
+                            keyboardType = KeyboardType.Text,
+                            imeAction = ImeAction.Next
+                        ),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(min = 120.dp)
                     )
                 }
 

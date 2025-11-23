@@ -9,9 +9,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Forum
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.ListAlt
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.VolunteerActivism
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -106,5 +108,6 @@ sealed class BottomNavItem(
 
     object Profile : BottomNavItem("profile", Icons.Default.Person, "Perfil")
 
-    object Forum : BottomNavItem("forum", Icons.Default.Forum, "Foro")
+//    object Forum : BottomNavItem("forum", Icons.Filled.VolunteerActivism, "Pedidos")
+    object Forum : BottomNavItem("forum", Icons.Filled.ListAlt, "Pedidos")
 }
