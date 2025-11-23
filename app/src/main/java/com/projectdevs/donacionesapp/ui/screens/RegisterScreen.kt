@@ -53,9 +53,10 @@ fun RegisterScreen(navigateToHome: () -> Unit = {}, navigateBack: () -> Unit = {
     var date by remember { mutableStateOf("") }
 
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.background(Color.White).fillMaxSize(),
         topBar = {
             TopAppBar(
+                modifier = Modifier.background(Color.White),
                 title = { },
                 navigationIcon = {
                     IconButton(onClick = { navigateBack() }) {
@@ -90,13 +91,12 @@ fun RegisterScreen(navigateToHome: () -> Unit = {}, navigateBack: () -> Unit = {
                     .fillMaxWidth()
                     .padding(bottom = 20.dp),
                 text = "Ingresa tus datos y forma parte de nuestra comunidad.",
-                fontSize = 14.sp,
+                fontSize = 16.sp,
                 color = Color.Gray,
                 textAlign = TextAlign.Start
             )
             OutlinedTextField(
                 modifier = Modifier
-                    .height(45.dp)
                     .fillMaxWidth(),
                 value = name,
                 onValueChange = { name = it },
@@ -117,7 +117,7 @@ fun RegisterScreen(navigateToHome: () -> Unit = {}, navigateBack: () -> Unit = {
             )
 
             OutlinedTextField(
-                modifier = Modifier.height(45.dp).fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth(),
                 value = phone,
                 onValueChange = { phone = it },
                 label = { Text(text = "Teléfono", fontSize = 13.sp) },
@@ -131,7 +131,7 @@ fun RegisterScreen(navigateToHome: () -> Unit = {}, navigateBack: () -> Unit = {
                 },
             )
             OutlinedTextField(
-                modifier = Modifier.height(45.dp).fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth(),
                 value = email,
                 onValueChange = { email = it },
                 label = { Text(text = "Correo",fontSize = 13.sp) },
@@ -145,7 +145,7 @@ fun RegisterScreen(navigateToHome: () -> Unit = {}, navigateBack: () -> Unit = {
                 },
             )
             OutlinedTextField(
-                modifier = Modifier.height(45.dp).fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth(),
                 value = date,
                 onValueChange = { date = it },
                 label = { Text(text = "Fecha de nacimiento",fontSize = 13.sp) },
@@ -162,7 +162,7 @@ fun RegisterScreen(navigateToHome: () -> Unit = {}, navigateBack: () -> Unit = {
 
             Button(
                 onClick = { navigateToHome() },
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().height(50.dp),
                 shape = RoundedCornerShape(12.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Green90,

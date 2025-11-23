@@ -203,7 +203,7 @@ fun MeetNotification() {
     Box(
         Modifier
             .fillMaxWidth()
-            .height(150.dp)
+            .height(130.dp)
             .clip(
                 shape = RoundedCornerShape(20.dp),
             )

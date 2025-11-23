@@ -1,6 +1,7 @@
 package com.projectdevs.donacionesapp.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,9 +14,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -28,13 +32,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.projectdevs.donacionesapp.ui.theme.Gray100
 
+@Preview
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ForumChatScreen(navController: NavController) {
+fun ForumChatScreen(
+    navigateBack:() -> Unit = {}
+) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -52,6 +61,7 @@ fun ForumChatScreen(navController: NavController) {
                 },
                 navigationIcon = {
                     IconButton(onClick = {
+                        navigateBack()
                     }) {
                         Icon(
                             imageVector = Icons.Default.KeyboardArrowLeft,
@@ -96,9 +106,7 @@ fun ForumChatScreen(navController: NavController) {
             Spacer(Modifier.height(20.dp))
 
             Spacer(Modifier.height(20.dp))
-            Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.Start) {
-                SpeechBubbleLeft("Dale, nos vemos mañana!")
-            }
+
             Spacer(Modifier.height(20.dp))
             Box(Modifier.padding(horizontal = 30.dp)) {
                 Text(
@@ -108,9 +116,43 @@ fun ForumChatScreen(navController: NavController) {
                     textAlign = TextAlign.Center
                 )
             }
-
             Spacer(Modifier.height(10.dp))
             MeetNotification()
+
+            Spacer(Modifier.height(10.dp))
+            Column(
+                modifier = Modifier
+                    .background(Gray100)
+                    .fillMaxWidth()
+                    .padding(20.dp)
+                    .clip(RoundedCornerShape(5.dp)),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = "Vimos que paso la fecha acordada ¿entregaste el pedido?",
+                    fontSize = 13.sp,
+                    textAlign = TextAlign.Center
+                )
+                Spacer(Modifier.height(10.dp))
+                Row(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
+
+                    Button(onClick = {}, shape = RoundedCornerShape(5.dp), colors = ButtonDefaults.buttonColors( containerColor = Color.DarkGray)) {
+                        Text(
+                            text = "Si, fue entregado.", fontSize = 13.sp
+                        )
+                    }
+
+                    Button(onClick = {}, shape = RoundedCornerShape(5.dp),  colors = ButtonDefaults.buttonColors( containerColor = Color.Gray)) {
+                        Text(
+                            text = "No fue entregado.",
+                            fontSize = 13.sp
+                        )
+                    }
+                }
+            }
+
+
+
             Spacer(Modifier.height(10.dp))
 
         }

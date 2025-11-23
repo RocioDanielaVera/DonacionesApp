@@ -48,24 +48,33 @@ fun InitialScreen(navigateToLogin:() -> Unit = {}, navigateToRegister:() -> Unit
         )
 
         Text(
-            text = "Forma parte del cambio.",
+            modifier = Modifier.fillMaxWidth(),
+            text = "Forma parte del",
             fontSize = 45.sp,
             color = Color.Black,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
+            textAlign = TextAlign.Start
+        )
+        Text(
+            modifier = Modifier.fillMaxWidth(),
+            text = "cambio.",
+            fontSize = 45.sp,
+            color = Color.Black,
+            fontWeight = FontWeight.Bold,
+            textAlign = TextAlign.Start
         )
         Text(
             modifier = Modifier.fillMaxWidth(),
             text = "Buscamos ayudar a quienes más lo necesiten. \nTu presencia marca la diferencia.",
-            fontSize = 12.sp,
+            fontSize = 16.sp,
             color = Color.Gray,
             textAlign = TextAlign.Start,
-            fontWeight = FontWeight.Bold
         )
-        Spacer(Modifier.height(5.dp))
+        Spacer(Modifier.height(10.dp))
 
         Button(
             onClick = { navigateToLogin() },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().height(50.dp),
             shape = RoundedCornerShape(12.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = Green40,
@@ -80,9 +89,10 @@ fun InitialScreen(navigateToLogin:() -> Unit = {}, navigateToRegister:() -> Unit
                 )
             }
         )
+        Spacer(Modifier.height(5.dp))
         Button(
             onClick = { navigateToRegister()},
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().height(50.dp),
             shape = RoundedCornerShape(12.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = Green90,

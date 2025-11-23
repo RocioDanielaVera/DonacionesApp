@@ -8,7 +8,7 @@ sealed class Screen(
     data object Forum : Screen("forum")
 
     data object Home : Screen("home")
-
+    data object Register : Screen("register")
     data object Login : Screen("login")
 
     data object Profile : Screen("profile")

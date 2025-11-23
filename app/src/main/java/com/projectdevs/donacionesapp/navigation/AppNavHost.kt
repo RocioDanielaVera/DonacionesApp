@@ -23,9 +23,11 @@ import com.projectdevs.donacionesapp.ui.screens.DonationRequestsScreen
 import com.projectdevs.donacionesapp.ui.screens.EditProfileScreen
 import com.projectdevs.donacionesapp.ui.screens.ForumChatScreen
 import com.projectdevs.donacionesapp.ui.screens.HomeScreen
+import com.projectdevs.donacionesapp.ui.screens.InitialScreen
 import com.projectdevs.donacionesapp.ui.screens.LoginScreen
 import com.projectdevs.donacionesapp.ui.screens.PostScreen
 import com.projectdevs.donacionesapp.ui.screens.ProfileScreen
+import com.projectdevs.donacionesapp.ui.screens.RegisterScreen
 
 @Composable
 fun AppNavHost() {
@@ -35,32 +37,51 @@ fun AppNavHost() {
 
     Scaffold(
         bottomBar = {
-            if (currentRoute != Screen.Login.route) {
+            if (currentRoute != Screen.Login.route || currentRoute != Screen.Register.route) {
                 BottomAppBar(navController = navController)
             }
                     },
         ) { padding ->
         NavHost(
             navController = navController,
-            startDestination = Screen.Login.route,
+            startDestination = "InitialScreen",
             modifier = Modifier
                 .padding(
                     bottom = padding.calculateBottomPadding(),
                     top = 0.dp
                 ),
         ) {
+
+            composable("InitialScreen"){
+                InitialScreen(
+                    navigateToLogin = { navController.navigate(Screen.Login.route)},
+                    navigateToRegister = { navController.navigate(Screen.Register.route)}
+                )
+            }
+
+
+            composable(Screen.Register.route){
+                RegisterScreen(
+                    navigateToHome = { navController.navigate(BottomNavItem.Home.route)},
+                    navigateBack = { navController.popBackStack()}
+                )
+            }
+
+
             composable("chatScreen"){
                 ChatScreen(navController = navController)
             }
 
             composable(Screen.Login.route) {
-                LoginScreen(navController = navController)
+                LoginScreen(
+                    navigateToRegister = { navController.navigate(Screen.Register.route)},
+                    navigateToHome = { navController.navigate(Screen.Home.route)}
+
+                )
             }
+
             composable("forumChatScreen"){
-                ForumChatScreen(navController = navController)
-            }
-            composable("chatScreen"){
-                ChatScreen(navController = navController)
+                ForumChatScreen(navigateBack = { navController.popBackStack()})
             }
 
             composable("postScreen") {
@@ -81,7 +102,8 @@ fun AppNavHost() {
 
             composable(BottomNavItem.Forum.route) {
                 DonationRequestsScreen(
-                    onNavigateToCreate = { navController.navigate("create_donation")}
+                    onNavigateToCreate = { navController.navigate("create_donation")},
+                    onNavigateToChat = { navController.navigate("forumChatScreen")}
                 )
             }
 

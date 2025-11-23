@@ -52,6 +52,7 @@ fun DonationRequestsScreen(
     onBack: () -> Unit = {},
     onSelectRequest: (DonationRequest) -> Unit = {},
     onNavigateToCreate: () -> Unit,
+    onNavigateToChat:() -> Unit,
     modifier: Modifier = Modifier
 ) {
     // Estado base: lista mutable
@@ -178,7 +179,7 @@ fun DonationRequestsScreen(
                     items(filtered, key = { it.id }) { req ->
                         DonationCard(
                             request = req,
-                            onContact = { /* pantalla de navegación */ }
+                            onContact = {  onNavigateToChat()}
                         )
                     }
                 }
@@ -672,6 +673,7 @@ private fun DonationRequestsScreenPreview() {
     MaterialTheme {
         DonationRequestsScreen(
             onNavigateToCreate = { },
+            onNavigateToChat = {}
         )
     }
 }
