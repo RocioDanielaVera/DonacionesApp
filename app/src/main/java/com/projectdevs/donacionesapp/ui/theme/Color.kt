@@ -11,3 +11,5 @@ val Green90 = Color(0xFFBDCCBD)
 val Green70 = Color(0xFF87C48B)
 val PurpleGrey40 = Color(0xFF695B71)
 val Pink40 = Color(0xFF64527D)
+
+val Gray100= Color(0xFFE5E5E5)
