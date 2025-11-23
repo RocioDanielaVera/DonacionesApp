@@ -81,7 +81,7 @@ fun AppNavHost() {
             }
 
             composable("forumChatScreen"){
-                ForumChatScreen(navController = navController)
+                ForumChatScreen(navigateBack = { navController.popBackStack()})
             }
 
             composable("postScreen") {
@@ -102,7 +102,8 @@ fun AppNavHost() {
 
             composable(BottomNavItem.Forum.route) {
                 DonationRequestsScreen(
-                    onNavigateToCreate = { navController.navigate("create_donation")}
+                    onNavigateToCreate = { navController.navigate("create_donation")},
+                    onNavigateToChat = { navController.navigate("forumChatScreen")}
                 )
             }
 
