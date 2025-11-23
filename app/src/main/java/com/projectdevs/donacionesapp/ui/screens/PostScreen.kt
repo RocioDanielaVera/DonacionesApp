@@ -4,15 +4,19 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Category
+import androidx.compose.material.icons.filled.EditLocationAlt
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowUp
@@ -44,17 +48,17 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
 import androidx.navigation.NavController
-import com.projectdevs.donacionesapp.ui.theme.Gray100
 
-
+//@Preview(heightDp = 1500)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PostScreen(
-     navController: NavController,
+    navController: NavController,
     onBackClick: () -> Unit = {}
 ) {
     var title by rememberSaveable { mutableStateOf("") }
@@ -67,7 +71,15 @@ fun PostScreen(
     var selectedItem by remember { mutableStateOf("") }
     var selectedCategory by remember { mutableStateOf("") }
     var textFiledSize by remember { mutableStateOf(Size.Zero) }
+    val categories = listOf("Alimentos", "Ropa", "Educación", "Salud")
+    val locations  = listOf("San Justo", "Morón", "CABA")
 
+    var category by remember { mutableStateOf<String?>(null) }
+    var location by remember { mutableStateOf<String?>(null) }
+
+    var showCategorySheet by remember { mutableStateOf(false) }
+    var showLocationSheet by remember { mutableStateOf(false) }
+    val locationValid = location != null
     val icon = if (expanded) {
         Icons.Filled.KeyboardArrowUp
     } else {
@@ -78,7 +90,7 @@ fun PostScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(text = "Nueva publicación", fontSize = 14.sp)
+                    Text(text = "Nueva publicación", fontSize = 17.sp)
                 },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
@@ -92,7 +104,7 @@ fun PostScreen(
                     Text(
                         modifier = Modifier
                             .clickable(onClick = {
-                                navController.popBackStack()
+                        navController.popBackStack()
                             })
                             .padding(end = 20.dp),
                         text = "Publicar",
@@ -102,12 +114,15 @@ fun PostScreen(
             )
         },
     ) { paddingValues ->
+
+
+        val scrollState = rememberScrollState()
         Column(
             modifier = Modifier
+                .verticalScroll(scrollState)
                 .fillMaxWidth()
                 .padding(paddingValues)
                 .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
 
             Column(
@@ -145,7 +160,7 @@ fun PostScreen(
                 fontSize = 15.sp,
                 color = Color.Gray
             )
-
+            Spacer(Modifier.height(20.dp))
             //TITULO
 
             Text(
@@ -167,7 +182,7 @@ fun PostScreen(
                 color = Color.DarkGray
 
             )
-
+            Spacer(Modifier.height(20.dp))
             //DESCRIPCIÓN
             Text(
                 text = "Descripción",
@@ -187,6 +202,7 @@ fun PostScreen(
                     Text(text = "Descripción")
                 }
             )
+            Spacer(Modifier.height(20.dp))
             //CANTIDAD
             Text(
                 text = "Cantidad",
@@ -201,7 +217,7 @@ fun PostScreen(
                     Text(text = "Número de artículos")
                 }
             )
-
+            Spacer(Modifier.height(20.dp))
             //DETALLES
             Text(
                 text = "Detalles",
@@ -242,7 +258,7 @@ fun PostScreen(
 
                 }
             }
-
+            Spacer(Modifier.height(20.dp))
             //CATEGORIA
             Text(
                 text = "Categoria",
@@ -261,6 +277,7 @@ fun PostScreen(
                     label = {
                         Text(text = "Seleccionar")
                     },
+                    leadingIcon = { Icon(imageVector = Icons.Default.Category, contentDescription = null) },
                     trailingIcon = {
                         Icon(icon, "", Modifier.clickable {
                             expandedCategory = !expandedCategory
@@ -283,7 +300,7 @@ fun PostScreen(
 
                 }
             }
-
+            Spacer(Modifier.height(20.dp))
 
             //PREFERENCIAS DE ENTREGA
             Text(
@@ -291,24 +308,18 @@ fun PostScreen(
                 fontSize = 15.sp,
                 fontWeight = FontWeight.Bold
             )
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(80.dp).border(width = 2.dp,shape =  RoundedCornerShape(5.dp), color =  Color.Gray)
-            ){
-                Box(Modifier.background(Gray100).fillMaxWidth().height(40.dp))
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
-                ){
-                    Icon(imageVector = Icons.Default.LocationOn, contentDescription = null)
-                    Text(
-                        text = "Seleccionar una ubicación",
-                        color = Color.Gray
-                    )
-                }
-            }
 
+            LabeledPicker(
+                label = "",
+                value = location ?: "Seleccionar ubicación",
+                leadingIcon = {
+                    Icon(Icons.Default.EditLocationAlt, contentDescription = null)
+                },
+                onClick = { showLocationSheet = true },
+                isError = !locationValid && location != null
+            )
+
+            Spacer(Modifier.height(20.dp))
             //Boton publicar
             Button(
                 modifier = Modifier

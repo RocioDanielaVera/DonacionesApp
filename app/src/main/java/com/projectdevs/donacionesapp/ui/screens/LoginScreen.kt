@@ -46,7 +46,7 @@ import com.projectdevs.donacionesapp.ui.components.CustomDefaultText
 
 
 @Composable
-fun LoginScreen(navController: NavController) {
+fun LoginScreen(navigateToHome:() -> Unit = {}, navigateToRegister: () -> Unit) {
     var password by rememberSaveable { mutableStateOf("") }
     var email by rememberSaveable { mutableStateOf("") }
     var passwordVisibility by remember { mutableStateOf(false) }
@@ -79,8 +79,7 @@ fun LoginScreen(navController: NavController) {
 
         OutlinedTextField(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(45.dp),
+                .fillMaxWidth(),
             value = email,
             onValueChange = { email = it },
             label = {
@@ -101,8 +100,7 @@ fun LoginScreen(navController: NavController) {
 
         OutlinedTextField(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(45.dp),
+                .fillMaxWidth(),
             value = password,
             onValueChange = { password = it },
             label = {
@@ -142,7 +140,7 @@ fun LoginScreen(navController: NavController) {
             value = stringResource(R.string.login_text_button_esp),
             enabled = enabledButton,
             navigateToScreen = {
-                navController.navigate(BottomNavItem.Home.route)
+                navigateToHome()
             }
         )
 
@@ -150,7 +148,7 @@ fun LoginScreen(navController: NavController) {
 
         Text(
             modifier = Modifier
-                .clickable(onClick = {/* NAVIGATE TO REGISTER */ }),
+                .clickable(onClick = { navigateToRegister() }),
             text = stringResource(R.string.login_sign_in_onclick_text_esp),
             color = MaterialTheme.colorScheme.primary,
             style = MaterialTheme.typography.titleMedium,

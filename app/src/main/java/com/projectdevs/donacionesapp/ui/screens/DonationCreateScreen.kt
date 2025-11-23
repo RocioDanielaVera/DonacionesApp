@@ -60,6 +60,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import org.tensorflow.lite.support.label.Category
 
 // Modelo de creación
@@ -73,6 +74,7 @@ data class DonationDraft(
     val urgency: String?     // Baja / Media / Alta
 )
 
+@Preview
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DonationCreateScreen(
@@ -113,7 +115,7 @@ fun DonationCreateScreen(
         containerColor = Color(0xFFF5F8F6),
         topBar = {
             TopAppBar(
-                title = { Text("Solicitar Donación") },
+                title = { Text(text = "Solicitar Donación", fontSize = 17.sp) },
                 navigationIcon = {
                     IconButton(onClick = onClose) {
                         Icon(Icons.Default.Close, contentDescription = "Cerrar")
@@ -134,6 +136,11 @@ fun DonationCreateScreen(
                     .padding(horizontal = 16.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
+                Text(
+                    text = "Titulo",
+                    style = MaterialTheme.typography.titleSmall
+                )
+
                 OutlinedTextField(
                     value = title,
                     onValueChange = { if (it.length <= 60) title = it },
@@ -153,28 +160,39 @@ fun DonationCreateScreen(
                     modifier = Modifier.fillMaxWidth()
                 )
 
-                LabeledPicker(
-                    label = "Categoría",
-                    value = category ?: "Seleccionar",
-                    leadingIcon = {
-                        Icon(
-                            categoryIcon(category),
-                            contentDescription = "Categoría seleccionada"
-                        )
-                    },
-                    onClick = { showCategorySheet = true },
-                    isError = !categoryValid && category != null
-                )
-
-                LabeledPicker(
-                    label = "Localidad",
-                    value = location ?: "Seleccionar",
-                    leadingIcon = {
-                        Icon(Icons.Default.EditLocationAlt, contentDescription = null)
-                    },
-                    onClick = { showLocationSheet = true },
-                    isError = !locationValid && location != null
-                )
+                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Text(
+                        text = "Descripción",
+                        style = MaterialTheme.typography.titleSmall
+                    )
+                    Text(
+                        text = "Agregue una breve descripción del artículo a solicitar. Será lo primero que verán posibles donantes cercanos a tu ubicación.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    OutlinedTextField(
+                        value = description,
+                        onValueChange = { if (it.length <= 120) description = it },
+                        placeholder = { Text("Descripción") },
+                        minLines = 4,
+                        maxLines = 6,
+                        isError = description.isNotEmpty() && !descValid,
+                        supportingText = {
+                            val msg = if (description.isNotEmpty() && !descValid)
+                                "Máx. 120 caracteres"
+                            else "${description.length}/120 caracteres"
+                            Text(msg)
+                        },
+                        keyboardOptions = KeyboardOptions(
+                            capitalization = KeyboardCapitalization.Sentences,
+                            keyboardType = KeyboardType.Text,
+                            imeAction = ImeAction.Next
+                        ),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(min = 120.dp)
+                    )
+                }
 
                 // --------- CANTIDAD ----------
                 Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -218,6 +236,32 @@ fun DonationCreateScreen(
                     )
                 }
 
+
+                LabeledPicker(
+                    label = "Categoría",
+                    value = category ?: "Seleccionar",
+                    leadingIcon = {
+                        Icon(
+                            categoryIcon(category),
+                            contentDescription = "Categoría seleccionada"
+                        )
+                    },
+                    onClick = { showCategorySheet = true },
+                    isError = !categoryValid && category != null
+                )
+
+                LabeledPicker(
+                    label = "Preferencias de entrega",
+                    value = location ?: "Seleccionar ubicación",
+                    leadingIcon = {
+                        Icon(Icons.Default.EditLocationAlt, contentDescription = null)
+                    },
+                    onClick = { showLocationSheet = true },
+                    isError = !locationValid && location != null
+                )
+
+
+
                 // --------- URGENCIA ----------
                 Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                     Text(
@@ -237,39 +281,6 @@ fun DonationCreateScreen(
                     )
                 }
 
-                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                    Text(
-                        text = "Descripción",
-                        style = MaterialTheme.typography.titleSmall
-                    )
-                    Text(
-                        text = "Agregue una breve descripción del artículo a solicitar. Será lo primero que verán posibles donantes cercanos a tu ubicación.",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                    OutlinedTextField(
-                        value = description,
-                        onValueChange = { if (it.length <= 120) description = it },
-                        placeholder = { Text("Descripción") },
-                        minLines = 4,
-                        maxLines = 6,
-                        isError = description.isNotEmpty() && !descValid,
-                        supportingText = {
-                            val msg = if (description.isNotEmpty() && !descValid)
-                                "Máx. 120 caracteres"
-                            else "${description.length}/120 caracteres"
-                            Text(msg)
-                        },
-                        keyboardOptions = KeyboardOptions(
-                            capitalization = KeyboardCapitalization.Sentences,
-                            keyboardType = KeyboardType.Text,
-                            imeAction = ImeAction.Next
-                        ),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .heightIn(min = 120.dp)
-                    )
-                }
 
                 Divider(modifier = Modifier.padding(top = 8.dp))
 
@@ -322,7 +333,7 @@ fun DonationCreateScreen(
 }
 
 @Composable
-private fun LabeledPicker(
+fun LabeledPicker(
     label: String,
     value: String,
     leadingIcon: @Composable (() -> Unit)? = null,
