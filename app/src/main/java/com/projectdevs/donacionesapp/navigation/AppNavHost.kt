@@ -49,6 +49,10 @@ fun AppNavHost() {
                     top = 0.dp
                 ),
         ) {
+            composable("chatScreen"){
+                ChatScreen(navController = navController)
+            }
+
             composable(Screen.Login.route) {
                 LoginScreen(navController = navController)
             }

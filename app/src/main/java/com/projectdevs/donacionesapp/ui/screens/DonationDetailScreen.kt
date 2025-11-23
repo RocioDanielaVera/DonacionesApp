@@ -53,7 +53,7 @@ import com.projectdevs.donacionesapp.domain.Donation
 fun DonationDetailScreen(
     donation: Donation,
     onBackClick: () -> Unit,
-    navController: NavController
+    navController: NavController,
 ) {
     Scaffold(
         topBar = {
@@ -85,7 +85,7 @@ fun DonationDetailScreen(
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
                 Button(
-                    onClick = { navController.navigate("chatScreen") },
+                    onClick = { navController.navigate("chatScreen")},
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(50.dp),
