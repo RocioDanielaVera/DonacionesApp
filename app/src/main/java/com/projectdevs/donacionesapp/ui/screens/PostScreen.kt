@@ -47,13 +47,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
+import androidx.navigation.NavController
 import com.projectdevs.donacionesapp.ui.theme.Gray100
 
-//@Preview(heightDp = 1500)
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PostScreen(
-    /* navController: NavController */
+     navController: NavController,
     onBackClick: () -> Unit = {}
 ) {
     var title by rememberSaveable { mutableStateOf("") }
@@ -91,7 +92,7 @@ fun PostScreen(
                     Text(
                         modifier = Modifier
                             .clickable(onClick = {
-//                                navController.popBackStack()
+                                navController.popBackStack()
                             })
                             .padding(end = 20.dp),
                         text = "Publicar",
@@ -293,7 +294,7 @@ fun PostScreen(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(80.dp)
+                    .height(80.dp).border(width = 2.dp,shape =  RoundedCornerShape(5.dp), color =  Color.Gray)
             ){
                 Box(Modifier.background(Gray100).fillMaxWidth().height(40.dp))
                 Row(
