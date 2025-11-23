@@ -65,7 +65,7 @@ fun DonationDetailScreen(
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color(0xFF5ACF74),
+                    containerColor = Color(0xFF74B895),
                     titleContentColor = Color.White,
                     navigationIconContentColor = Color.White
                 )
@@ -91,7 +91,7 @@ fun DonationDetailScreen(
                         .height(50.dp),
                     shape = RoundedCornerShape(25.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFF4BB053)
+                        containerColor = Color(0xFF74B895)
                     )
                 ) {
                     Text("Solicitar", color = Color.White)
@@ -147,7 +147,9 @@ fun DonationDetailScreen(
             )
 
             Card(
-                onClick = { /*TODO navegar a perfil*/  },
+                onClick = {
+
+                },
                 shape = RoundedCornerShape(12.dp),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -233,5 +235,6 @@ fun DonationDetailScreen(
 //    DonationDetailScreen(
 //        donation = Donation(1, "Comida", "Donación de alimentos no perecederos", "Ulises", ""),
 //        onBackClick = {},
+//        navController =
 //        )
 //}

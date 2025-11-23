@@ -100,7 +100,8 @@ fun DonationRequestsScreen(
 //                onClick = { requests += randomRequest() },
                 onClick = onNavigateToCreate,
                 icon = { Icon(Icons.Filled.Add, contentDescription = null) },
-                text = { Text("Agregar") }
+                text = { Text("Agregar") },
+                containerColor = MaterialTheme.colorScheme.primary
             )
         },
     ) { innerPadding ->
@@ -401,7 +402,8 @@ fun DonationCard(
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 AssistChip(
-                    onClick = { },
+                    onClick = {
+                    },
                     enabled = false,
                     label = { Text(request.category) }
                 )

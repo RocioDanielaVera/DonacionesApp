@@ -54,7 +54,7 @@ import com.projectdevs.donacionesapp.ui.theme.DonacionesAppTheme
         floatingActionButton = {
             FloatingActionButton(
                 onClick = onAddClick,
-                containerColor = Color(0xFF74B895),
+                containerColor = Color(0xFF4BAF53),
                 contentColor = Color.White ,
                 shape = CircleShape
             ) {
@@ -123,7 +123,7 @@ fun ProfileContent(
                         .align(Alignment.BottomEnd)
                         .offset(x = (-120).dp, y = (-8).dp)
                         .size(36.dp)
-                        .background(Color(0xFF74B895), CircleShape)
+                        .background(Color(0xFF4BAF53), CircleShape)
                 ) {
                     Icon(
                         imageVector = Icons.Default.Edit,
