@@ -30,14 +30,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -45,7 +43,6 @@ import com.projectdevs.donacionesapp.R
 import com.projectdevs.donacionesapp.ui.components.BottomNavItem
 import com.projectdevs.donacionesapp.ui.components.CustomButton
 import com.projectdevs.donacionesapp.ui.components.CustomDefaultText
-import com.projectdevs.donacionesapp.ui.components.CustomTitle
 
 
 @Composable
@@ -90,7 +87,7 @@ fun LoginScreen(navController: NavController) {
                 Text(
                     text = stringResource(R.string.login_email_or_user_outlined_textfield_esp),
                     fontSize = 13.sp
-                    )
+                )
             },
             leadingIcon = {
                 Icon(
@@ -119,7 +116,8 @@ fun LoginScreen(navController: NavController) {
                     imageVector = Icons.Default.Lock,
                     modifier = Modifier.size(15.dp),
                     contentDescription = null,
-                    tint = Color.Gray)
+                    tint = Color.Gray
+                )
             },
             trailingIcon = {
                 IconButton(onClick = { passwordVisibility = !passwordVisibility })
