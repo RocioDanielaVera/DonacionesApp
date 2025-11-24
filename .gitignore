@@ -2,13 +2,17 @@
 .gradle
 /local.properties
 /.idea/caches
+/.idea/sonarlint
 /.idea/libraries
 /.idea/modules.xml
 /.idea/workspace.xml
+/.idea/deploymentTargetSelector.xml
 /.idea/navEditor.xml
 /.idea/assetWizardSettings.xml
 .DS_Store
 /build
+/app/build
+/gradle/wrapper/gradle-wrapper.jar
 /captures
 .externalNativeBuild
 .cxx

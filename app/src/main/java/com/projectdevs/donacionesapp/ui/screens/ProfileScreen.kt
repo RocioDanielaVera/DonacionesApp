@@ -4,6 +4,7 @@ import com.projectdevs.donacionesapp.R
 import androidx.compose.material.icons.Icons
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
@@ -13,8 +14,12 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Category
+import androidx.compose.material.icons.filled.Checkroom
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.LaptopChromebook
+import androidx.compose.material.icons.filled.LocalDining
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.SentimentVerySatisfied
@@ -170,6 +175,11 @@ fun ProfileContent(
                         .size(120.dp)
                         .clip(CircleShape)
                         .background(Color.LightGray)
+                        .border(
+                            width = 3.dp,
+                            color = MaterialTheme.colorScheme.primary,
+                            shape = CircleShape
+                        )
                         .align(Alignment.Center)
                 )
 
@@ -312,10 +322,10 @@ fun ProfileContent(
 fun DonationCard(category: String, count: Int, lastDate: String,onClick: (String) -> Unit) {
     val verdeFondo = colorResource(id = R.color.verdeFondo)
     val icon = when (category) {
-        "Alimentos" -> Icons.Default.Info
-        "Indumentaria" -> Icons.Default.Info
-        "Electrodomésticos" -> Icons.Default.Info
-        else -> Icons.Default.Info
+        "Alimentos" -> Icons.Default.LocalDining
+        "Indumentaria" -> Icons.Default.Checkroom
+        "Electrodomésticos" -> Icons.Default.LaptopChromebook
+        else -> Icons.Default.Category
     }
 
     Card(
@@ -389,14 +399,16 @@ fun OpinionCard(nombre: String, fecha: String, calificacion: Int, descripcion: S
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Icon(
-                    imageVector = Icons.Default.Person,
-                    contentDescription = "Foto perfil",
-                    tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier
-                        .size(32.dp)
-                        .padding(end = 8.dp)
-                )
+                Image(
+                painter = painterResource(id = R.drawable.foto_perfil),
+                contentDescription = "Foto perfil",
+                modifier = Modifier
+                    .size(32.dp)
+                    .padding(end = 8.dp)
+                    .clip(CircleShape),
+
+                contentScale = ContentScale.Crop
+            )
 
                 Row(modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween

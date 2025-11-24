@@ -2,6 +2,7 @@ package com.projectdevs.donacionesapp.ui.navigation
 
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -23,6 +24,7 @@ import com.projectdevs.donacionesapp.ui.screens.DonationCreateScreen
 import com.projectdevs.donacionesapp.ui.screens.DonationDetailScreen
 import com.projectdevs.donacionesapp.ui.screens.DonationHistoryScreen
 import com.projectdevs.donacionesapp.ui.screens.DonationRequestsScreen
+import com.projectdevs.donacionesapp.ui.screens.DonatorProfileScreen
 import com.projectdevs.donacionesapp.ui.screens.EditProfileScreen
 import com.projectdevs.donacionesapp.ui.screens.ForumChatScreen
 import com.projectdevs.donacionesapp.ui.screens.HomeScreen
@@ -147,6 +149,26 @@ fun AppNavHost() {
             }
 
             composable(
+                route = "donator_profile/{donorId}",
+
+                arguments = listOf(
+                    navArgument("donorId") {
+                        type = NavType.IntType
+                    }
+                )
+            ) { backStackEntry ->
+
+                val donorId = backStackEntry.arguments?.getInt("donorId") ?: 0
+
+                DonatorProfileScreen(
+                    navigateBack = { navController.popBackStack() },
+                    navController = navController,
+                    donorId = donorId,
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
+
+            composable(
                 route = "donation_history/{category}",
                 arguments = listOf(
                     navArgument("category") {
@@ -155,8 +177,6 @@ fun AppNavHost() {
                 )
             ) { backStackEntry ->
                 val category = backStackEntry.arguments?.getString("category") ?: "Error"
-
-
                 DonationHistoryScreen(
                     navController = navController,
                     category = category,

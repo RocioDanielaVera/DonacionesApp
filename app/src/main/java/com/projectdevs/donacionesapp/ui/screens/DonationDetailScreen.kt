@@ -338,7 +338,7 @@ fun DonationDetailScreen(
                         Row(
                             modifier = Modifier
                                 .clip(RoundedCornerShape(8.dp))
-                                .clickable {/*TODO NAVEGACION A PERFIL*/ }
+                                .clickable {navController.navigate("donator_profile/${donation.donorId}") }
                                 .padding(6.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
