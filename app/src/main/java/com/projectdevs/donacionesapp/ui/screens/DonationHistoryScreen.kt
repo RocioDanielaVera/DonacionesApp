@@ -1,6 +1,5 @@
 package com.projectdevs.donacionesapp.ui.screens
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -43,6 +42,7 @@ fun DonationHistoryScreen(navController: NavController,
                   category: String,
                           onBackClick: () -> Unit = { navController.popBackStack() }) {
     Scaffold(
+        containerColor = Color(0xFFF5F8F6),
         topBar = {
             TopAppBar(
                 title = { Text("Histórico") },
@@ -61,16 +61,19 @@ fun DonationHistoryScreen(navController: NavController,
     }
 }
 
-@SuppressLint("SuspiciousIndentation")
 @Composable
 fun DonationHistoryContent(
     modifier: Modifier = Modifier,
     category: String, navController: NavController) {
     val verdeFondo = colorResource(id = R.color.verdeFondo)
+
     val donationsFinalizadas = historialDonaciones
 
     val filteredDonations = donationsFinalizadas.filter { it.categoria == category }
 
+    val sortedDonations = filteredDonations.sortedByDescending { item ->
+        sortableDate(item.fecha)
+    }
     LazyColumn(
         modifier = modifier
             .fillMaxSize()
@@ -87,7 +90,7 @@ fun DonationHistoryContent(
             )
         }
 
-        items(filteredDonations) { item ->
+        items(sortedDonations) { item ->
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -118,6 +121,13 @@ fun DonationHistoryContent(
         }
     }
 }
+
+fun sortableDate(date: String): String {
+    val parts = date.split("/")
+    return if (parts.size == 3) "${parts[2]}${parts[0]}${parts[1]}" else date
+}
+
+
 @Preview(showBackground = true)
 @Composable
 fun DonationHistoryPreview() {

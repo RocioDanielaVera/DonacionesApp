@@ -14,4 +14,6 @@ val historialDonaciones = listOf(
     DonationHistoryItem(102, "Televisor antiguo", "05/08/2025", "Electrodomésticos", "Finalizada","Juan Perez"),
     DonationHistoryItem(103, "Pantalones de niño", "01/10/2025", "Indumentaria", "Finalizada","Juan Perez"),
     DonationHistoryItem(104, "Leche y arroz", "15/10/2025", "Alimentos", "Finalizada","Juan Perez"),
-)
+    DonationHistoryItem(105, "Campera mujer cordero", "20/11/2025", "Indumentaria", "Finalizada","Juan Perez"),
+
+    )

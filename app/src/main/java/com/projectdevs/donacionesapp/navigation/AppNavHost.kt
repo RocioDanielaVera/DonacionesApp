@@ -1,10 +1,13 @@
 package com.projectdevs.donacionesapp.ui.navigation
 
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -34,10 +37,21 @@ fun AppNavHost() {
     val navController = rememberNavController()
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = currentBackStackEntry?.destination?.route
+    val routesToExclude = listOf(
+        Screen.Login.route,
+        Screen.Register.route,
+        "InitialScreen",
+        "edit_profile",
+        "chatScreen",
+        "forumChatScreen",
+        "postScreen",
+        "donation_history/{category}",
+        "create_donation"
+    )
 
     Scaffold(
         bottomBar = {
-            if (currentRoute != Screen.Login.route || currentRoute != Screen.Register.route) {
+            if (currentRoute != null && currentRoute !in routesToExclude) {
                 BottomAppBar(navController = navController)
             }
                     },
@@ -47,9 +61,13 @@ fun AppNavHost() {
             startDestination = "InitialScreen",
             modifier = Modifier
                 .padding(
-                    bottom = padding.calculateBottomPadding(),
-                    top = 0.dp
-                ),
+                    top = padding.calculateTopPadding(),
+                    start = padding.calculateStartPadding(LocalLayoutDirection.current),
+                    end = padding.calculateEndPadding(LocalLayoutDirection.current)
+                )
+                .padding(
+                    bottom = if (currentRoute != null && currentRoute !in routesToExclude) padding.calculateBottomPadding() else 0.dp
+                )
         ) {
 
             composable("InitialScreen"){
@@ -58,7 +76,6 @@ fun AppNavHost() {
                     navigateToRegister = { navController.navigate(Screen.Register.route)}
                 )
             }
-
 
             composable(Screen.Register.route){
                 RegisterScreen(

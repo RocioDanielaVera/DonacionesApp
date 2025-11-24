@@ -38,7 +38,7 @@ import com.projectdevs.donacionesapp.ui.theme.DonacionesAppTheme
 @Composable
 fun EditProfileScreen(navController: NavController,
                       onBackClick: () -> Unit = { navController.popBackStack() }) {
-    Scaffold(
+    Scaffold( containerColor = Color(0xFFF5F8F6),
         topBar = {
             TopAppBar(
                 title = { Text("Editar perfil") },
