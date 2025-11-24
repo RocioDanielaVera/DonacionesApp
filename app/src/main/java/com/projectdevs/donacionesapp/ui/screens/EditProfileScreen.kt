@@ -70,11 +70,6 @@ fun EditProfileContent(
     var mail by remember { mutableStateOf("usuario1234@gmail.com") }
     var confirmarGuardado by remember { mutableStateOf(false) }
 
-    val galleryLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent(),
-        onResult = { }
-    )
-
     Column(
         modifier = modifier
             .fillMaxSize()

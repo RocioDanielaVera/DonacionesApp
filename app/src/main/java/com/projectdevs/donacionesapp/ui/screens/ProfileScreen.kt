@@ -107,10 +107,6 @@ fun ProfileContent(
 
     val history = historialDonaciones
 
-    val donationsByCategory = history
-        .groupBy { it.categoria }
-        .map { (category, list) -> category to list.size }
-
     val misOpiniones = listOf(
         Opinion(
             nombre = "Pedro Diaz",
