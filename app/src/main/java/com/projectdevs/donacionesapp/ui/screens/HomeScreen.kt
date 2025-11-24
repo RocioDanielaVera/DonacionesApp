@@ -6,6 +6,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,6 +20,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -30,14 +32,17 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.Chat
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Chat
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
@@ -56,6 +61,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.Green
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
@@ -68,7 +74,10 @@ import com.projectdevs.donacionesapp.domain.Donation
 import com.projectdevs.donacionesapp.ui.components.CategoryButton
 import com.projectdevs.donacionesapp.ui.components.DonationCard
 import com.projectdevs.donacionesapp.ui.components.FilterOption
+import com.projectdevs.donacionesapp.ui.components.LocationButton
 import com.projectdevs.donacionesapp.ui.components.SearchBar
+import com.projectdevs.donacionesapp.ui.screens.HomeScreen
+import com.projectdevs.donacionesapp.ui.theme.Green70
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -85,13 +94,13 @@ fun HomeScreen(
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         floatingActionButton = {
-            FloatingActionButton(
+            ExtendedFloatingActionButton(
                 onClick = onAddClick,
-                containerColor = Color(0xFF4BB053),
-                shape = CircleShape
-            ) {
-                Icon(Icons.Default.Add, contentDescription = "Agregar donación", tint = Color.White)
-            }
+                icon = { Icon(imageVector = Icons.Filled.Add, contentDescription = null) },
+                text = { Text("Nueva publicación") },
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = Color.Black
+            )
         },
     ) { padding ->
         Column(
@@ -104,7 +113,7 @@ fun HomeScreen(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(Color(0xFF5ACF74))
+                    .background(MaterialTheme.colorScheme.primary)
                     .statusBarsPadding()
                     .padding(vertical = 16.dp, horizontal = 16.dp)
             ) {
@@ -171,10 +180,15 @@ fun HomeScreen(
                         Icon(
                             Icons.Default.FilterList,
                             contentDescription = "Filtros",
-                            tint = Color(0xFF74B895)
+                            tint = MaterialTheme.colorScheme.secondaryContainer
                         )
                     }
                 }
+            }
+
+
+            val filteredDonations = donaciones.filter { donation ->
+                selectedCategory == null || donation.category == selectedCategory
             }
 
             Column(
@@ -183,12 +197,21 @@ fun HomeScreen(
                     .padding(vertical = 2.dp, horizontal = 10.dp)
             ) {
                 Spacer(Modifier.height(8.dp))
-                CategoryButton (
-                    categories = listOf("Gatronomia", "Indumentaria", "Electronica"),
-                    selectedCategory = selectedCategory,
-                    onSelectedCategory = { selectedCategory = it }
-                )
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .horizontalScroll(rememberScrollState()),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    CategoryButton(
+                        categories = listOf("Gatronomia", "Indumentaria", "Electronica", "Otros"),
+                        selectedCategory = selectedCategory,
+                        onSelectedCategory = { selectedCategory = it }
+                    )
+                }
             }
+
+            var abrirSheet by remember { mutableStateOf(false)}
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -197,19 +220,22 @@ fun HomeScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
             ) {
-                Text("Sugerencias de", style = MaterialTheme.typography.titleSmall)
+                Text("Sugerencias por ubicación", style = MaterialTheme.typography.titleSmall)
 
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(
-                        Icons.Default.LocationOn,
-                        contentDescription = "Ubicacion",
-                        tint = Color(0xFF74B895),
-                        modifier = Modifier.size(16.dp)
-                    )
-                    Text(
-                        "Ubicacion",
-                        color = Color(0xFF74B895),
-                        style = MaterialTheme.typography.bodyMedium
+                LocationButton(
+                    location = "San justo - 65km",
+                    onClick = {abrirSheet = true}
+                )
+
+                if (abrirSheet) {
+                    LocationSheet(
+                        ubicacionActual = "San justo - 65km",
+                        ubicacionesRecientes = listOf(
+                            "Rafael Castillo 1755CP - Buenos Aires",
+                            "San Justo - Buenos Aires"
+                        ),
+                        onUbicacionSeleccionada = {abrirSheet = false},
+                        onClose = {abrirSheet = false}
                     )
                 }
             }
@@ -223,7 +249,7 @@ fun HomeScreen(
                     .padding(horizontal = 8.dp),
                 contentPadding = PaddingValues(bottom = 100.dp),
             ) {
-                items(donaciones) { donacion ->
+                items(filteredDonations) { donacion ->
                     DonationCard(donacion) { onItemClick(donacion) }
                 }
             }
@@ -271,23 +297,152 @@ fun HomeScreen(
     }
 }
 
-@Preview(showBackground = true, showSystemUi = true)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreenPreview() {
-    // Lista de ejemplo
-    val donaciones =
-        listOf(
-            Donation(1, "Comida", "Donación de alimentos no perecederos", "Gastronomía", ""),
-            Donation(2, "Ropa de abrigo", "Camperas y mantas", "Indumentaria", ""),
-            Donation(3, "Celulares", "Dispositivos en buen estado", "Electrónica", ""),
-            Donation(4, "Juguetes", "Juguetes para niños", "Otros", ""),
+fun LocationSheet(
+    ubicacionesRecientes: List<String>,
+    ubicacionActual: String,
+    onUbicacionSeleccionada: (String) -> Unit,
+    onClose: () -> Unit
+) {
+    ModalBottomSheet(
+        onDismissRequest = onClose,
+        sheetState = rememberModalBottomSheetState()
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 16.dp, end = 16.dp)
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                IconButton(onClick = onClose) {
+                    Icon(Icons.Default.Close, contentDescription = "Cerrar")
+                }
+
+                Spacer(modifier = Modifier.weight(1f))
+
+                Text(
+                    text = "Elige una ubicación",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold
+                )
+
+                Spacer(modifier = Modifier.weight(1f))
+
+                Icon(Icons.Default.Search, contentDescription = "Buscar")
+            }
+
+            Spacer(Modifier.height(16.dp))
+
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(12.dp))
+                    .border(
+                        width = 2.dp,
+                        color = Color.Black,
+                        shape = RoundedCornerShape(12.dp),
+                    )
+                    .padding(10.dp)
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.mapa_estatico),
+                    contentDescription = "Mapa",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(140.dp)
+                        .clip(RoundedCornerShape(12.dp)),
+                    contentScale = ContentScale.Crop
+                )
+
+                Spacer(Modifier.height(8.dp))
+
+                Text(
+                    ubicacionActual,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    color = Color.Gray
+                )
+
+                Spacer(Modifier.height(8.dp))
+            }
+
+            Spacer(Modifier.height(24.dp))
+
+            Text(
+                text = "Ubicaciones elegidas recientemente",
+                style = MaterialTheme.typography.titleSmall,
+                fontWeight = FontWeight.SemiBold
+            )
+
+            Spacer(Modifier.height(12.dp))
+
+            ubicacionesRecientes.forEach { ubicacion ->
+                UbicacionItem(
+                    texto = ubicacion,
+                    onClick = { onUbicacionSeleccionada(ubicacion)}
+                )
+                Spacer(Modifier.height(8.dp))
+            }
+        }
+    }
+}
+
+@Composable
+fun UbicacionItem(
+    texto: String,
+    onClick: () -> Unit
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(12.dp))
+            .clickable { onClick() }
+            .border(
+                width = 2.dp,
+                color = Color.Black,
+                shape = RoundedCornerShape(12.dp)
+            ),
+    ) {
+        Icon(
+            imageVector = Icons.Default.LocationOn,
+            contentDescription = null,
+            tint = Color.Gray,
+            modifier = Modifier.padding(10.dp)
         )
 
-    MaterialTheme {
-        HomeScreen(
-            onItemClick = {},
-            onAddClick = {},
-            donaciones = donaciones,
+        Spacer(Modifier.width(8.dp))
+
+        Text(
+            text = texto,
+            style = MaterialTheme.typography.titleMedium,
+            color = Color.Gray
         )
     }
 }
+
+
+//@Preview(showBackground = true, showSystemUi = true)
+//@Composable
+//fun HomeScreenPreview() {
+//    // Lista de ejemplo
+//    val donaciones =
+//        listOf(
+//            Donation(1, "Comida", "Donación de alimentos no perecederos", "Gastronomía", ""),
+//            Donation(2, "Ropa de abrigo", "Camperas y mantas", "Indumentaria", ""),
+//            Donation(3, "Celulares", "Dispositivos en buen estado", "Electrónica", ""),
+//            Donation(4, "Juguetes", "Juguetes para niños", "Otros", ""),
+//        )
+//
+//    MaterialTheme {
+//        HomeScreen(
+//            onItemClick = {},
+//            onAddClick = {},
+//            donaciones = donaciones,
+//        )
+//    }
+//}
