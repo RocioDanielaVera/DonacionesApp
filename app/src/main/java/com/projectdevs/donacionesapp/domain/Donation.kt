@@ -1,6 +1,5 @@
 package com.projectdevs.donacionesapp.domain
 
-import android.R.attr.category
 import com.projectdevs.donacionesapp.R
 
 data class Donation(
