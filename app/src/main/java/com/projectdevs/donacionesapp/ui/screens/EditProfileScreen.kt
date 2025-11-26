@@ -5,6 +5,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import com.projectdevs.donacionesapp.R
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -27,6 +28,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -65,9 +67,9 @@ fun EditProfileContent(
     navController: NavController
 ) {
     val verde = colorResource(id = R.color.verde)
-    var nombre by remember { mutableStateOf("Usuario") }
+    var nombre by remember { mutableStateOf("Juan López") }
     var ubicacion by remember { mutableStateOf("San Justo") }
-    var mail by remember { mutableStateOf("usuario1234@gmail.com") }
+    var mail by remember { mutableStateOf("juanlopez@gmail.com") }
     var confirmarGuardado by remember { mutableStateOf(false) }
 
     Column(
@@ -83,13 +85,18 @@ fun EditProfileContent(
             contentAlignment = Alignment.Center
         ) {
             Image(
-                imageVector = Icons.Default.Person,
+                painter = painterResource(id = R.drawable.foto_perfil),
                 contentDescription = "Foto de perfil",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .size(120.dp)
                     .clip(CircleShape)
                     .background(Color.LightGray)
+                    .border(
+                        width = 3.dp,
+                        color = MaterialTheme.colorScheme.primary,
+                        shape = CircleShape
+                    )
             )
             IconButton(
                 onClick = { /* cambiar foto */ },
