@@ -405,7 +405,7 @@ fun OpinionCard(nombre: String, fecha: String, calificacion: Int, descripcion: S
     ) {
         Column(
             modifier = Modifier
-                .padding(5.dp)
+                .padding(10.dp)
                 .fillMaxSize()
         ) {
             Row(
