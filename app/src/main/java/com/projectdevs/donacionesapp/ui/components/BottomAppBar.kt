@@ -62,9 +62,8 @@ fun BottomAppBar(
                     selected = selected,
                     onClick = {
                         navController.navigate(item.route) {
-                            popUpTo(navController.graph.startDestinationId) { saveState = true }
+                            popUpTo(BottomNavItem.Home.route) { inclusive = false }
                             launchSingleTop = true
-                            restoreState = true
                         }
                     },
                     icon = {
