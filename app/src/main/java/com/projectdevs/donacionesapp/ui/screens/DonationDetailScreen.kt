@@ -277,11 +277,14 @@ fun DonationDetailScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         //foto del donante
-                        Box(
+                        Image(
+                            painter = painterResource(id = R.drawable.foto_perfil),
+                            contentDescription = "Avatar",
                             modifier = Modifier
                                 .size(50.dp)
                                 .clip(CircleShape)
-                                .background(Color(0xFFD9D9D9))
+                                .border(2.dp, Color.White, CircleShape),
+                            contentScale = ContentScale.Crop
                         )
 
                         Spacer(Modifier.width(12.dp))
@@ -328,7 +331,7 @@ fun DonationDetailScreen(
                             }
 
                             Text(
-                                text = "Se unio en XXXX",
+                                text = "Se unio en 2025",
                                 fontSize = 13.sp,
                                 color = Color.Gray,
                                 maxLines = 1

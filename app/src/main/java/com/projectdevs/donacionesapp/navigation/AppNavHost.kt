@@ -3,11 +3,20 @@ package com.projectdevs.donacionesapp.ui.navigation
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavType
@@ -56,14 +65,63 @@ fun AppNavHost() {
             if (currentRoute != null && currentRoute !in routesToExclude) {
                 BottomAppBar(navController = navController)
             }
-                    },
+        },
+        floatingActionButton = {
+            when (currentRoute) {
+
+                BottomNavItem.Home.route -> {
+                    ExtendedFloatingActionButton(
+                        onClick = { navController.navigate("postScreen")},
+                        text = { Text("Nueva publicación") },
+                        icon = { Icon(Icons.Filled.Add, null)},
+                        modifier = Modifier.offset(y = 8.dp),
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = Color.Black
+                    )
+                }
+
+                BottomNavItem.Forum.route -> {
+                    ExtendedFloatingActionButton(
+                        onClick = { navController.navigate("create_donation")},
+                        text = { Text("Nuevo pedido") },
+                        icon = { Icon(Icons.Filled.Add, null)},
+                        modifier = Modifier.offset(y = 8.dp),
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = Color.Black
+                    )
+                }
+
+                BottomNavItem.Profile.route -> {
+//                    FloatingActionButton(
+//                        onClick = { navController.navigate("postScreen")},
+//                        containerColor = MaterialTheme.colorScheme.primary,
+//                        contentColor = Color.Black,
+//                        modifier = Modifier.offset(y = 8.dp),
+//                    ) {
+//                        Icon(
+//                            Icons.Filled.Add,
+//                            "Agregar donacion"
+//                        )
+//                    }
+                    ExtendedFloatingActionButton(
+                        onClick = { navController.navigate("postScreen")},
+                        text = { Text("Nueva publicación") },
+                        icon = { Icon(Icons.Filled.Add, null)},
+                        modifier = Modifier.offset(y = 8.dp),
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = Color.Black
+                    )
+                }
+
+                else -> {}
+            }
+        }
         ) { padding ->
         NavHost(
             navController = navController,
             startDestination = "InitialScreen",
             modifier = Modifier
                 .padding(
-                    top = padding.calculateTopPadding(),
                     start = padding.calculateStartPadding(LocalLayoutDirection.current),
                     end = padding.calculateEndPadding(LocalLayoutDirection.current)
                 )
@@ -105,7 +163,7 @@ fun AppNavHost() {
 
             composable("postScreen") {
                 PostScreen(
-                    onBackClick = {navController.popBackStack(Screen.Home.route, inclusive = false)},
+                    onBackClick = {navController.popBackStack()},
                     navController = navController
                 )
             }
@@ -114,14 +172,12 @@ fun AppNavHost() {
                     onItemClick = { donation ->
                         navController.navigate("detail/${donation.id}")
                     },
-                    onAddClick = { navController.navigate("postScreen") },
                     donaciones = donaciones,
                 )
             }
 
             composable(BottomNavItem.Forum.route) {
                 DonationRequestsScreen(
-                    onNavigateToCreate = { navController.navigate("create_donation")},
                     onNavigateToChat = { navController.navigate("forumChatScreen")}
                 )
             }
@@ -137,7 +193,7 @@ fun AppNavHost() {
                     navController = navController,
                     onEditClick = { navController.navigate("edit_profile") },
                     onBackClick = { navController.navigate("home") },
-                    onAddClick = { navController.navigate("postScreen") },
+//                    onAddClick = { navController.navigate("postScreen") },
                     onDonationCardClick = { category ->
                         navController.navigate("donation_history/$category")
                     }
