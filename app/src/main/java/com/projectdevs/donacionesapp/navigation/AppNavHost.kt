@@ -79,7 +79,7 @@ fun AppNavHost() {
                         icon = { Icon(Icons.Filled.Add, null)},
                         modifier = Modifier.offset(y = 8.dp),
                         containerColor = MaterialTheme.colorScheme.primary,
-                        contentColor = Color.Black
+
                     )
                 }
 
@@ -90,7 +90,7 @@ fun AppNavHost() {
                         icon = { Icon(Icons.Filled.Add, null)},
                         modifier = Modifier.offset(y = 8.dp),
                         containerColor = MaterialTheme.colorScheme.primary,
-                        contentColor = Color.Black
+
                     )
                 }
 
@@ -106,18 +106,17 @@ fun AppNavHost() {
 //                            "Agregar donacion"
 //                        )
 //                    }
-//                    ExtendedFloatingActionButton(
-//                        onClick = { navController.navigate("postScreen")},
-//                        text = { Text("Nueva publicación") },
-//                        icon = { Icon(Icons.Filled.Add, null)},
-//                        modifier = Modifier.offset(y = 8.dp),
-//                        containerColor = MaterialTheme.colorScheme.primary,
-//                        contentColor = Color.Black
-//                    )
-                    ExpandableFloatingButton (
-                        navigateToPost = { navController.navigate("postScreen")},
-                        navigateToPedido = { navController.navigate("create_donation")}
+                    ExtendedFloatingActionButton(
+                        onClick = { navController.navigate("postScreen")},
+                        text = { Text("Nueva publicación") },
+                        icon = { Icon(Icons.Filled.Add, null)},
+                        modifier = Modifier.offset(y = 8.dp),
+                        containerColor = MaterialTheme.colorScheme.primary,
                     )
+//                    ExpandableFloatingButton (
+//                        navigateToPost = { navController.navigate("postScreen")},
+//                        navigateToPedido = { navController.navigate("create_donation")}
+//                    )
                 }
 
                 else -> {}
