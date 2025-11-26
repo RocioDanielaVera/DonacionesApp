@@ -157,5 +157,19 @@ val donaciones = listOf(
         condition = "Nuevo",
         donorScore = 4.6,
         category = "Gatronomia"
+    ),
+    Donation(
+        id = 11,
+        title = "Heladera Samsung - Como nueva",
+        description = "Heladera Samsung, 1 mes de uso. Excelente funcionamiento.",
+        donorName = "Ana Mendoza",
+        donorId = 1,
+        deliveryPreference = "Retiro en San Justo, cerca de la sucursal Central Oeste",
+        imagen = R.drawable.heladera,
+        location = "San Justo",
+        unit = 1,
+        condition = "Usado",
+        donorScore = 4.5,
+        category = "Electronica"
     )
 )

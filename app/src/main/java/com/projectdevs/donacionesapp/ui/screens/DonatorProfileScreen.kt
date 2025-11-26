@@ -6,12 +6,18 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Chat
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.automirrored.outlined.Chat
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.SentimentVerySatisfied
 import androidx.compose.material3.*
@@ -26,6 +32,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -33,15 +40,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.projectdevs.donacionesapp.domain.Donation
 import com.projectdevs.donacionesapp.domain.donaciones
 import com.projectdevs.donacionesapp.domain.historialDonaciones
+import com.projectdevs.donacionesapp.ui.components.DonationCard
 import com.projectdevs.donacionesapp.ui.theme.DonacionesAppTheme
+import com.projectdevs.donacionesapp.ui.theme.Green30
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DonatorProfileScreen(navController: NavController,
                          donorId: Int,
                          navigateBack: () -> Unit,
+                         donaciones: List<Donation>,
                   modifier: Modifier = Modifier) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
@@ -60,6 +71,16 @@ fun DonatorProfileScreen(navController: NavController,
                     }
 
                 },
+                actions = {
+                    IconButton(onClick = {/* TODO Abrir mensajes */ }) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Outlined.Chat,
+                            contentDescription = "Mensajes",
+                            tint = Color(0xFF2E7D32),
+                            modifier = Modifier.size(28.dp)
+                        )
+                    }
+                },
             )
         },
     ) { innerPadding ->
@@ -70,7 +91,8 @@ fun DonatorProfileScreen(navController: NavController,
                 end = innerPadding.calculateEndPadding(LocalLayoutDirection.current)
             ),
             bottomPadding = innerPadding.calculateBottomPadding(),
-            donorId = donorId
+            donorId = donorId,
+            donaciones = donaciones
         )
     }
 }
@@ -78,10 +100,11 @@ fun DonatorProfileScreen(navController: NavController,
 fun DonatorProfileContent(
     modifier: Modifier = Modifier,
     bottomPadding: Dp,
-    donorId: Int
+    donorId: Int,
+    donaciones: List<Donation>
 ) {
     val donatorProfile = getDonatorProfileInfo(donorId)
-    val history = historialDonaciones
+    val donorActiveDonations = donaciones.filter { it.donorId == donorId }
 
     val misOpiniones = listOf(
         Opinion(
@@ -103,173 +126,187 @@ fun DonatorProfileContent(
             descripcion = "Excelente."
         )
     )
-    Column(
+    //contenedor principal
+    LazyColumn(
         modifier = modifier
-            .fillMaxSize()
-            .padding(16.dp),
+            .fillMaxSize(),
+            //.padding(horizontal = 0.dp),
+        contentPadding = PaddingValues(bottom = bottomPadding + 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(IntrinsicSize.Min)
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.foto_perfil),
-                contentDescription = "Foto de perfil",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .size(120.dp)
-                    .clip(CircleShape)
-                    .background(Color.LightGray)
-                    .border(
-                        width = 3.dp,
-                        color = MaterialTheme.colorScheme.primary,
-                        shape = CircleShape
+        item {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(IntrinsicSize.Min)
+                        .padding(top = 16.dp)
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.foto_perfil),
+                        contentDescription = "Foto de perfil",
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .size(120.dp)
+                            .clip(CircleShape)
+                            .background(Color.LightGray)
+                            .border(
+                                width = 3.dp,
+                                color = MaterialTheme.colorScheme.primary,
+                                shape = CircleShape
+                            )
+                            .align(Alignment.Center)
                     )
-                    .align(Alignment.Center)
-            )
 
-            Image(
-                painter = painterResource(id = R.drawable.medalla_oro),
-                contentDescription = "Medalla de oro",
+                    Image(
+                        painter = painterResource(id = R.drawable.medalla_oro),
+                        contentDescription = "Medalla de oro",
+                        modifier = Modifier
+                            .size(50.dp)
+                            .align(Alignment.BottomCenter)
+                            .offset(x = 30.dp, y = 15.dp)
+                    )
+                }
+                Spacer(modifier = Modifier.height(12.dp))
+
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(donatorProfile.name, fontWeight = FontWeight.Bold, fontSize = 25.sp)
+                    }
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            buildAnnotatedString {
+                                withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                                    append("10")
+                                }
+                                append(" Publicaciones")
+                            },
+                            fontSize = 14.sp,
+                            color = Color.Black
+                        )
+                        Text(
+                            buildAnnotatedString {
+                                append(" - ")
+                                withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                                    append("15")
+                                }
+                                append(" Donaciones")
+                            },
+                            fontSize = 14.sp,
+                            color = Color.Black
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.height(15.dp))
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(0.8f),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            imageVector = Icons.Filled.LocationOn,
+                            tint = MaterialTheme.colorScheme.primary,
+                            contentDescription = "Ubicación",
+                            modifier = Modifier.size(20.dp)
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(text = donatorProfile.location, fontSize = 14.sp)
+                    }
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            imageVector = Icons.Filled.SentimentVerySatisfied,
+                            tint = MaterialTheme.colorScheme.primary,
+                            contentDescription = "Estado de ánimo",
+                            modifier = Modifier.size(20.dp)
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(text = "Se unió en ${donatorProfile.joinYear}", fontSize = 14.sp)
+                    }
+                }
+
+                Divider(modifier = Modifier.padding(vertical = 12.dp))
+
+               Row(
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            "Opiniones",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 18.sp,
+                        )
+                    }
+
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            text = "Ver todas",
+                            color = Green30,
+                            fontSize = 12.sp,
+                            textDecoration = TextDecoration.Underline
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.height(8.dp))
+            }
+        }
+        item {
+            LazyRow(//contentPadding = PaddingValues(horizontal = 16.dp),
                 modifier = Modifier
-                    .size(50.dp)
-                    .align(Alignment.BottomCenter)
-                    .offset(x = 30.dp, y = 15.dp)
-            )
-        }
-        Spacer(modifier = Modifier.height(12.dp))
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(donatorProfile.name, fontWeight = FontWeight.Bold, fontSize = 25.sp)
-            }
-            Spacer(modifier = Modifier.height(4.dp))
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    buildAnnotatedString {
-                        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                            append("10")
-                        }
-                        append(" Publicaciones")
-                    },
-                    fontSize = 14.sp,
-                    color = Color.Black
-                )
-
-                Text(
-                    buildAnnotatedString {
-                        append(" - ")
-                        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                            append("15")
-                        }
-                        append(" Donaciones")
-                    },
-                    fontSize = 14.sp,
-                    color = Color.Black
-                )
-            }
-        }
-        Spacer(modifier = Modifier.height(15.dp))
-        // ubicación
-        Row(
-            modifier = Modifier.fillMaxWidth(0.8f),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(
-                    imageVector = Icons.Filled.LocationOn,
-                    tint = MaterialTheme.colorScheme.primary,
-                    contentDescription = "Ubicación",
-                    modifier = Modifier.size(20.dp)
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(
-                    text = donatorProfile.location,
-                    fontSize = 14.sp
-                )
-            }
-
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(
-                    imageVector = Icons.Filled.SentimentVerySatisfied,
-                    tint = MaterialTheme.colorScheme.primary,
-                    contentDescription = "Estado de ánimo",
-                    modifier = Modifier.size(20.dp)
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(
-                    text = "Se unió en ${donatorProfile.joinYear}",
-                    fontSize = 14.sp
-                )
-            }
-        }
-
-        Divider(modifier = Modifier.padding(vertical = 12.dp))
-
-        Text(
-            "Opiniones sobre ${donatorProfile.name}",
-            fontWeight = FontWeight.Bold,
-            fontSize = 18.sp,
-            modifier = Modifier.align(Alignment.Start)
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        LazyRow {
-            items(misOpiniones) { opinion ->
-                OpinionCard(
-                    nombre = opinion.nombre,
-                    fecha = opinion.fecha,
-                    calificacion = opinion.calificacion,
-                    descripcion = opinion.descripcion
-                )
-                Spacer(modifier = Modifier.width(12.dp))
-            }
-        }
-
-        Spacer(modifier = Modifier.height(32.dp))
-
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = bottomPadding + 16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                "¿Tienes alguna duda sobre la donación?",
-                color = Color.DarkGray,
-                fontSize = 14.sp,
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
-            Button(
-                onClick = { /*TODO: Navegar al chat*/ },
-                modifier = Modifier
-                    .fillMaxWidth(0.9f)
-                    .height(50.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4BAF53))
-            ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(Icons.AutoMirrored.Filled.Chat, contentDescription = "Enviar Mensaje")
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                        "Contactar a ${donatorProfile.name}",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 16.sp
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                items(misOpiniones) { opinion ->
+                    OpinionCard(
+                        nombre = opinion.nombre,
+                        fecha = opinion.fecha,
+                        calificacion = opinion.calificacion,
+                        descripcion = opinion.descripcion
                     )
                 }
             }
         }
+
+        item {
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Text(
+                text = "Publicaciones activas",
+                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp,
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
+            )
+            //Spacer(modifier = Modifier.height(8.dp))
         }
 
+        items(
+            items = donorActiveDonations.chunked(2),
+            key = { row -> row.hashCode() }
+        ) { rowItems ->
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 4.dp),
+                horizontalArrangement = Arrangement.SpaceAround
+            ) {
+                Box(modifier = Modifier.weight(1f).padding(4.dp)) {
+                    DonationCard(rowItems.first()) { }
+                }
+
+                if (rowItems.size > 1) {
+                    Box(modifier = Modifier.weight(1f).padding(4.dp)) {
+                        DonationCard(rowItems.last()) { }
+                    }
+                } else {
+                    Spacer(modifier = Modifier.weight(1f).padding(4.dp))
+                }
+            }
+        }
     }
+}
 
 data class ProfileInfo(
     val name: String,
@@ -308,6 +345,7 @@ fun DonatorProfileScreenPreview() {
         DonatorProfileScreen(
             navController = navController,
             donorId = 1,
+            donaciones = donaciones,
             navigateBack = {}
         )
     }

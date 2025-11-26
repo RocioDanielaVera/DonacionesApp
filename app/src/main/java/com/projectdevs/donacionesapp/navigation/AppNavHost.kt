@@ -57,7 +57,9 @@ fun AppNavHost() {
         "forumChatScreen",
         "postScreen",
         "donation_history/{category}",
-        "create_donation"
+        "create_donation",
+        "donator_profile/{donorId}",
+        "detail/{donationId}"
     )
 
     Scaffold(
@@ -220,6 +222,7 @@ fun AppNavHost() {
                     navigateBack = { navController.popBackStack() },
                     navController = navController,
                     donorId = donorId,
+                    donaciones = donaciones,
                     modifier = Modifier.fillMaxSize()
                 )
             }
