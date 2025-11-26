@@ -37,6 +37,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
@@ -47,6 +48,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.projectdevs.donacionesapp.domain.historialDonaciones
 import com.projectdevs.donacionesapp.ui.theme.DonacionesAppTheme
+import com.projectdevs.donacionesapp.ui.theme.Green30
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -62,7 +64,6 @@ import com.projectdevs.donacionesapp.ui.theme.DonacionesAppTheme
             topBar = {
                 TopAppBar(
                     title = { Text("Perfil") },
-
                     actions = {
                         IconButton(onClick = onEditClick) {
                             Icon(
@@ -267,16 +268,32 @@ fun ProfileContent(
 
             Divider(modifier = Modifier.padding(vertical = 12.dp))
 
-            Text(
-                "Mis opiniones",
-                fontWeight = FontWeight.Bold,
-                fontSize = 18.sp,
-                modifier = Modifier.align(Alignment.Start)
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        "Mis opiniones",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 18.sp,
+                    )
+                }
+
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = "Ver todas",
+                        color = Green30,
+                        fontSize = 12.sp,
+                        textDecoration = TextDecoration.Underline
+                    )
+                }
+            }
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            LazyRow {
+            LazyRow(
+                horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 items(misOpiniones) { opinion ->
                     OpinionCard(
                         nombre = opinion.nombre,
@@ -284,7 +301,6 @@ fun ProfileContent(
                         calificacion = opinion.calificacion,
                         descripcion = opinion.descripcion
                     )
-                    Spacer(modifier = Modifier.width(12.dp))
                 }
             }
 
@@ -302,7 +318,7 @@ fun ProfileContent(
             LazyColumn(modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f),
-                contentPadding = PaddingValues(bottom = bottomPadding)) {
+                contentPadding = PaddingValues(bottom = 100.dp)) {
                 items(finalDonationsListWithDate) { (category, count, lastDate) ->
 
                     DonationCard(
@@ -324,7 +340,7 @@ fun DonationCard(category: String, count: Int, lastDate: String,onClick: (String
     val icon = when (category) {
         "Alimentos" -> Icons.Default.LocalDining
         "Indumentaria" -> Icons.Default.Checkroom
-        "Electrodomésticos" -> Icons.Default.LaptopChromebook
+        "Electrónica" -> Icons.Default.LaptopChromebook
         else -> Icons.Default.Category
     }
 
