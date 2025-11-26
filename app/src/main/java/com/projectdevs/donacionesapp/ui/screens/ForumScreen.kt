@@ -26,6 +26,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.tooling.preview.Preview
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+import java.util.concurrent.TimeUnit
 import kotlin.random.Random
 
 // ----------------- MODELO -----------------
@@ -97,7 +101,7 @@ fun DonationRequestsScreen(
         containerColor = Color(0xFFF5F8F6),
         topBar = {
             TopAppBar(
-                title = { Text("Pedidos de Donaciones") },
+                title = { Text("Pedidos de donaciones") },
 //                navigationIcon = {
 //                    IconButton(onClick = onBack) {
 //                        Icon(Icons.Filled.ArrowBack, contentDescription = "Volver")
@@ -361,6 +365,7 @@ fun DonationCard(
     modifier: Modifier = Modifier
 ) {
     var expanded by remember { mutableStateOf(false) }
+    val formattedDate = formatTimestamp(request.timestamp)
 
     Box(
         modifier = Modifier
@@ -384,8 +389,20 @@ fun DonationCard(
                 modifier = Modifier.padding(16.dp),
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                if (!request.urgency.isNullOrBlank()) {
-                    UrgencyChip(request.urgency)
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    if (!request.urgency.isNullOrBlank()) {
+                        UrgencyChip(request.urgency)
+                    }
+
+                    Text(
+                        text = formattedDate,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
                 }
 
                 Text(
@@ -524,7 +541,7 @@ private fun UrgencyChip(urgency: String) {
         "alta" -> Triple(
             Color(0xFFFFEBEE),
             Color(0xFFD32F2F),
-            "Alta urgencia"
+            "Urgencia alta"
         )
 
         "media" -> Triple(
@@ -669,6 +686,20 @@ private fun randomRequest(): DonationRequest {
         timestamp = System.currentTimeMillis(),
         distanceKm = Random.nextDouble(0.5, 25.0)
     )
+}
+
+//formateo la fecha
+private fun formatTimestamp(timestamp: Long): String {
+    val now = System.currentTimeMillis()
+    val diff = now - timestamp
+
+    return when {
+        diff < TimeUnit.MINUTES.toMillis(1) -> "Hace segundos"
+        diff < TimeUnit.HOURS.toMillis(1) -> "Hace ${TimeUnit.MILLISECONDS.toMinutes(diff)} min"
+        diff < TimeUnit.HOURS.toMillis(24) -> "Hace ${TimeUnit.MILLISECONDS.toHours(diff)} horas"
+        diff < TimeUnit.DAYS.toMillis(7) -> "Hace ${TimeUnit.MILLISECONDS.toDays(diff)} días"
+        else -> SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date(timestamp))
+    }
 }
 
 @Preview(showBackground = true, widthDp = 390, heightDp = 844)
