@@ -299,7 +299,7 @@ fun ProfileContent(
             LazyColumn(modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f),
-                contentPadding = PaddingValues(bottom = bottomPadding)) {
+                contentPadding = PaddingValues(bottom = 100.dp)) {
                 items(finalDonationsListWithDate) { (category, count, lastDate) ->
 
                     DonationCard(
@@ -311,7 +311,6 @@ fun ProfileContent(
                     Spacer(modifier = Modifier.height(8.dp))
                 }
             }
-
         }
     }
 
