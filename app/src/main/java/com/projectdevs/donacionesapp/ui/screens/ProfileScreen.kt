@@ -17,6 +17,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Category
 import androidx.compose.material.icons.filled.Checkroom
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.LaptopChromebook
 import androidx.compose.material.icons.filled.LocalDining
@@ -55,6 +56,7 @@ import com.projectdevs.donacionesapp.ui.theme.Green30
     fun ProfileScreen(navController: NavController,
                       onEditClick: () -> Unit,
                       onBackClick: () -> Unit,
+                      onLogoutClick: () -> Unit,
 //                      onAddClick: () -> Unit,
                       onDonationCardClick: (String) -> Unit,
                       modifier: Modifier = Modifier) {
@@ -70,6 +72,13 @@ import com.projectdevs.donacionesapp.ui.theme.Green30
                                 imageVector = Icons.Default.Edit,
                                 contentDescription = "Editar",
                                 tint = Color(0xFF2E7D32)
+                            )
+                        }
+                        IconButton(onClick = onLogoutClick) {
+                            Icon(
+                                imageVector = Icons.Filled.ExitToApp,
+                                contentDescription = "Salir",
+                                tint = Color(0xFFe0150c)
                             )
                         }
                     }
@@ -132,7 +141,7 @@ fun ProfileContent(
 
     val totalDonaciones = history.size
 
-    val fixedCategories = listOf("Alimentos", "Indumentaria", "Electrodomésticos")
+    val fixedCategories = listOf("Alimentos", "Indumentaria", "Electrónica")
 
     val donationsSummary = history
         .groupBy { it.categoria }
@@ -494,6 +503,7 @@ fun ProfileScreenPreview() {
             onEditClick = {},
             onBackClick = {},
 //            onAddClick = {},
+            onLogoutClick = {},
             onDonationCardClick = {}
         )
     }

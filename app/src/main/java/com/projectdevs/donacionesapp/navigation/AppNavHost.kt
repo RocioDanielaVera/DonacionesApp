@@ -196,6 +196,7 @@ fun AppNavHost() {
                     onEditClick = { navController.navigate("edit_profile") },
                     onBackClick = { navController.navigate("home") },
 //                    onAddClick = { navController.navigate("postScreen") },
+                    onLogoutClick = {navController.navigate(Screen.Login.route)},
                     onDonationCardClick = { category ->
                         navController.navigate("donation_history/$category")
                     }
