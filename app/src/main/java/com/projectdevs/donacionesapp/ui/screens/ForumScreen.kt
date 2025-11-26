@@ -1,5 +1,6 @@
 package com.projectdevs.donacionesapp.ui.screens
 
+import android.R.attr.padding
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -20,6 +21,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -51,7 +53,6 @@ data class DonationRequest(
 fun DonationRequestsScreen(
     onBack: () -> Unit = {},
     onSelectRequest: (DonationRequest) -> Unit = {},
-    onNavigateToCreate: () -> Unit,
     onNavigateToChat:() -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -104,24 +105,27 @@ fun DonationRequestsScreen(
 //                }
             )
         },
-        floatingActionButton = {
-            // FAB para agregar dinámicamente una solicitud (demo)
-            ExtendedFloatingActionButton(
-                // HAY DOS OPCIONES + RANDOM REQUEST O HACER QUE LLEVE A LA +SCREEN DE CREACIÓN
-//                onClick = { requests += randomRequest() },
-                onClick = onNavigateToCreate,
-                icon = { Icon(Icons.Filled.Add, contentDescription = null) },
-                text = { Text("Nuevo Pedido") },
-//                containerColor = Color(0xFF4BB053),
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = Color.Black
-            )
-        },
+//        floatingActionButton = {
+//            // FAB para agregar dinámicamente una solicitud (demo)
+//            ExtendedFloatingActionButton(
+//                // HAY DOS OPCIONES + RANDOM REQUEST O HACER QUE LLEVE A LA +SCREEN DE CREACIÓN
+////                onClick = { requests += randomRequest() },
+//                onClick = onNavigateToCreate,
+//                icon = { Icon(Icons.Filled.Add, contentDescription = null) },
+//                text = { Text("Nuevo Pedido") },
+////                containerColor = Color(0xFF4BB053),
+//                containerColor = MaterialTheme.colorScheme.primary,
+//                contentColor = Color.Black
+//            )
+//        },
     ) { innerPadding ->
         Column(
             modifier = Modifier
-                .padding(innerPadding)
                 .fillMaxSize()
+                .padding(
+                    top = innerPadding.calculateTopPadding(),
+                    start = innerPadding.calculateStartPadding(LocalLayoutDirection.current),
+                    end = innerPadding.calculateEndPadding(LocalLayoutDirection.current))
         ) {
             // --- Filtros (orden + chips) ---
             Text(
@@ -171,7 +175,7 @@ fun DonationRequestsScreen(
             } else {
                 LazyColumn(
                     modifier = Modifier
-                        .fillMaxSize()
+                        .weight(1f)
                         .padding(horizontal = 16.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp),
                     contentPadding = PaddingValues(top = 12.dp, bottom = 112.dp)
@@ -672,7 +676,7 @@ private fun randomRequest(): DonationRequest {
 private fun DonationRequestsScreenPreview() {
     MaterialTheme {
         DonationRequestsScreen(
-            onNavigateToCreate = { },
+//            onNavigateToCreate = { },
             onNavigateToChat = {}
         )
     }

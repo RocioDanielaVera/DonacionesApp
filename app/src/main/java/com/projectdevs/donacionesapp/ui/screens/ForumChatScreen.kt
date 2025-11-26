@@ -1,6 +1,8 @@
 package com.projectdevs.donacionesapp.ui.screens
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,11 +33,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.projectdevs.donacionesapp.R
 import com.projectdevs.donacionesapp.ui.theme.Gray100
 
 @Preview
@@ -49,11 +54,14 @@ fun ForumChatScreen(
             TopAppBar(
                 title = {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Box(
-                            Modifier
+                        Image(
+                            painter = painterResource(id = R.drawable.foto_perfil),
+                            contentDescription = "Avatar",
+                            modifier = Modifier
                                 .size(40.dp)
-                                .clip(shape = CircleShape)
-                                .background(Color.LightGray)
+                                .clip(CircleShape)
+                                .border(1.dp, Color.White, CircleShape),
+                            contentScale = ContentScale.Crop
                         )
                         Spacer(Modifier.width(10.dp))
                         Text(text = "Ana", fontSize = 18.sp)

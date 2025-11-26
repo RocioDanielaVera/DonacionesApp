@@ -16,6 +16,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -84,7 +86,6 @@ import com.projectdevs.donacionesapp.ui.theme.Green70
 fun HomeScreen(
     donaciones: List<Donation>,
     onItemClick: (Donation) -> Unit,
-    onAddClick: () -> Unit,
 ) {
 
     var showFilterDialog by remember { mutableStateOf(false) }
@@ -92,16 +93,7 @@ fun HomeScreen(
     var selectedCategory by remember {mutableStateOf<String?>(null) }
 
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
-        floatingActionButton = {
-            ExtendedFloatingActionButton(
-                onClick = onAddClick,
-                icon = { Icon(imageVector = Icons.Filled.Add, contentDescription = null) },
-                text = { Text("Nueva publicación") },
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = Color.Black
-            )
-        },
+        modifier = Modifier.fillMaxSize()
     ) { padding ->
         Column(
             modifier =
@@ -124,7 +116,7 @@ fun HomeScreen(
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Image(
-                            painter = painterResource(id = R.drawable.icon_default),
+                            painter = painterResource(id = R.drawable.foto_perfil),
                             contentDescription = "Avatar",
                             modifier = Modifier
                                 .size(48.dp)
@@ -134,7 +126,7 @@ fun HomeScreen(
                         )
                         Spacer(Modifier.width(12.dp))
                         Text(
-                            "Bienvenido, user xxxx",
+                            "Bienvenido, Juan López",
                             color = Color.White,
                             style = MaterialTheme.typography.titleMedium.copy(fontSize = 18.sp)
                         )

@@ -55,7 +55,7 @@ import com.projectdevs.donacionesapp.ui.theme.Green30
     fun ProfileScreen(navController: NavController,
                       onEditClick: () -> Unit,
                       onBackClick: () -> Unit,
-                      onAddClick: () -> Unit,
+//                      onAddClick: () -> Unit,
                       onDonationCardClick: (String) -> Unit,
                       modifier: Modifier = Modifier) {
         Scaffold(
@@ -75,19 +75,15 @@ import com.projectdevs.donacionesapp.ui.theme.Green30
                     }
             )
         },
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = onAddClick,
-                containerColor = Color(0xFF4BAF53),
-                contentColor = Color.White ,
-                shape = CircleShape
-            ) {
-                Icon(
-                    Icons.Default.Add,
-                    contentDescription = "Agregar donación"
-                )
-            }
-        },
+//            floatingActionButton = {
+//                ExtendedFloatingActionButton(
+//                    onClick = onAddClick,
+//                    icon = { Icon(imageVector = Icons.Filled.Add, contentDescription = null) },
+//                    text = { Text("Nueva publicación") },
+//                    containerColor = MaterialTheme.colorScheme.primary,
+//                    contentColor = Color.Black
+//                )
+//            },
     ) { innerPadding ->
             ProfileContent(
                 modifier = Modifier.padding(
@@ -157,10 +153,11 @@ fun ProfileContent(
         match ?: Triple(fixedCategory, 0, "N/A")
     }.filter { it.second > 0 }
 
+
         Column(
             modifier = modifier
                 .fillMaxSize()
-                .padding(16.dp),
+                .padding(top = 16.dp, start = 16.dp, end = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Box(
@@ -330,7 +327,6 @@ fun ProfileContent(
                     Spacer(modifier = Modifier.height(8.dp))
                 }
             }
-
         }
     }
 
@@ -497,7 +493,7 @@ fun ProfileScreenPreview() {
             navController = navController,
             onEditClick = {},
             onBackClick = {},
-            onAddClick = {},
+//            onAddClick = {},
             onDonationCardClick = {}
         )
     }
