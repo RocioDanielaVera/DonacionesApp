@@ -95,6 +95,7 @@ fun DonationDetailScreen(
                     //modifier = Modifier.padding(start = 8.dp, bottom = 8.dp),
                     fontSize = 20.sp
                 )
+                Spacer(Modifier.height(5.dp))
                 Button(
                     onClick = { navController.navigate("chatScreen") },
                     modifier = Modifier
@@ -137,18 +138,6 @@ fun DonationDetailScreen(
                 .verticalScroll(rememberScrollState())
         ) {
             Spacer(Modifier.height(12.dp))
-
-            Text(
-                text = donation.title,
-                style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
-                fontSize = 20.sp
-            )
-
-            HorizontalDivider(
-                modifier = Modifier.padding(vertical = 12.dp),
-                thickness = 2.dp,
-                color = Color.LightGray
-            )
 
             Box(
                 modifier = Modifier
@@ -196,6 +185,12 @@ fun DonationDetailScreen(
                         .padding(horizontal = 12.dp, vertical = 4.dp)
                 )
             }
+            Spacer(Modifier.height(12.dp))
+            Text(
+                text = donation.title,
+                style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+                fontSize = 20.sp
+            )
 
             HorizontalDivider(
                 modifier = Modifier.padding(vertical = 12.dp),
@@ -210,6 +205,7 @@ fun DonationDetailScreen(
                     fontSize = 20.sp
                 )
             )
+            Spacer(Modifier.height(5.dp))
             Text(
                 donation.description,
                 style = MaterialTheme.typography.bodyMedium,
@@ -257,7 +253,7 @@ fun DonationDetailScreen(
                     fontSize = 20.sp
                 )
             )
-
+            Spacer(Modifier.height(5.dp))
             CompositionLocalProvider(
                 LocalTextStyle provides LocalTextStyle.current.copy(
                     platformStyle = PlatformTextStyle(includeFontPadding = false)

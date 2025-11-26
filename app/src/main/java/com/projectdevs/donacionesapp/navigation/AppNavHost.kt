@@ -28,6 +28,7 @@ import androidx.navigation.navArgument
 import com.projectdevs.donacionesapp.domain.donaciones
 import com.projectdevs.donacionesapp.ui.components.BottomAppBar
 import com.projectdevs.donacionesapp.ui.components.BottomNavItem
+import com.projectdevs.donacionesapp.ui.components.ExpandableFloatingButton
 import com.projectdevs.donacionesapp.ui.screens.ChatScreen
 import com.projectdevs.donacionesapp.ui.screens.DonationCreateScreen
 import com.projectdevs.donacionesapp.ui.screens.DonationDetailScreen
@@ -78,7 +79,7 @@ fun AppNavHost() {
                         icon = { Icon(Icons.Filled.Add, null)},
                         modifier = Modifier.offset(y = 8.dp),
                         containerColor = MaterialTheme.colorScheme.primary,
-                        contentColor = Color.Black
+
                     )
                 }
 
@@ -89,7 +90,7 @@ fun AppNavHost() {
                         icon = { Icon(Icons.Filled.Add, null)},
                         modifier = Modifier.offset(y = 8.dp),
                         containerColor = MaterialTheme.colorScheme.primary,
-                        contentColor = Color.Black
+
                     )
                 }
 
@@ -111,8 +112,11 @@ fun AppNavHost() {
                         icon = { Icon(Icons.Filled.Add, null)},
                         modifier = Modifier.offset(y = 8.dp),
                         containerColor = MaterialTheme.colorScheme.primary,
-                        contentColor = Color.Black
                     )
+//                    ExpandableFloatingButton (
+//                        navigateToPost = { navController.navigate("postScreen")},
+//                        navigateToPedido = { navController.navigate("create_donation")}
+//                    )
                 }
 
                 else -> {}

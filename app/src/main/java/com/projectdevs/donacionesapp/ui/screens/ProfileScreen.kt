@@ -1,5 +1,6 @@
 package com.projectdevs.donacionesapp.ui.screens
 
+import androidx.compose.foundation.BorderStroke
 import com.projectdevs.donacionesapp.R
 import androidx.compose.material.icons.Icons
 import androidx.compose.foundation.Image
@@ -344,9 +345,10 @@ fun DonationCard(category: String, count: Int, lastDate: String,onClick: (String
         modifier = Modifier
             .fillMaxWidth()
             .clickable { onClick(category) },
-        colors = CardDefaults.cardColors(containerColor = verdeFondo),
+       colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(4.dp),
-        shape = RoundedCornerShape(8.dp)
+        shape = RoundedCornerShape(8.dp),
+        border = BorderStroke(width = 1.dp, color = Color.LightGray)
     ) {
         Row(
             modifier = Modifier
@@ -398,14 +400,14 @@ fun OpinionCard(nombre: String, fecha: String, calificacion: Int, descripcion: S
     Card(
         modifier = Modifier
             .width(200.dp)
-            .height(90.dp),
-        colors = CardDefaults.cardColors(containerColor = verdeFondo),
+            .height(100.dp),
         elevation = CardDefaults.cardElevation(4.dp),
-        shape = RoundedCornerShape(8.dp)
+        shape = RoundedCornerShape(8.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        border = BorderStroke(width = 1.dp, color = Color.LightGray)
     ) {
         Column(
-            modifier = Modifier
-                .padding(5.dp)
+            modifier = Modifier.padding(10.dp)
                 .fillMaxSize()
         ) {
             Row(
