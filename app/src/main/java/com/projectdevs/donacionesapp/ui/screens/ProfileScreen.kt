@@ -14,16 +14,13 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.filled.Category
 import androidx.compose.material.icons.filled.Checkroom
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.ExitToApp
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.LaptopChromebook
 import androidx.compose.material.icons.filled.LocalDining
 import androidx.compose.material.icons.filled.LocationOn
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.SentimentVerySatisfied
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.*
@@ -77,7 +74,7 @@ import com.projectdevs.donacionesapp.ui.theme.Green30
                         }
                         IconButton(onClick = onLogoutClick) {
                             Icon(
-                                imageVector = Icons.Filled.ExitToApp,
+                                imageVector = Icons.AutoMirrored.Filled.ExitToApp,
                                 contentDescription = "Salir",
                                 tint = Color(0xFFe0150c)
                             )
@@ -142,7 +139,7 @@ fun ProfileContent(
 
     val totalDonaciones = history.size
 
-    val fixedCategories = listOf("Alimentos", "Indumentaria", "Electrónica")
+    val fixedCategories = listOf("Alimentos", "Indumentaria", "Electrodomésticos")
 
     val donationsSummary = history
         .groupBy { it.categoria }
@@ -346,7 +343,7 @@ fun DonationCard(category: String, count: Int, lastDate: String,onClick: (String
     val icon = when (category) {
         "Alimentos" -> Icons.Default.LocalDining
         "Indumentaria" -> Icons.Default.Checkroom
-        "Electrónica" -> Icons.Default.LaptopChromebook
+        "Electrodomésticos" -> Icons.Default.Category
         else -> Icons.Default.Category
     }
 
@@ -373,14 +370,16 @@ fun DonationCard(category: String, count: Int, lastDate: String,onClick: (String
                     .padding(end = 12.dp)
             )
 
-            Column {
+            Column{
                 Text(
                     text = category,
                     fontWeight = FontWeight.Bold,
                     fontSize = 15.sp
                 )
                 Spacer(modifier = Modifier.height(4.dp))
-                Row(
+                Row(modifier = Modifier
+                    .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ){
                     Text(
                         text = "Cantidad: $count",

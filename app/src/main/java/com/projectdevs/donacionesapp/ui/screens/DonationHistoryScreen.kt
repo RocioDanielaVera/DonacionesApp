@@ -1,5 +1,6 @@
 package com.projectdevs.donacionesapp.ui.screens
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -96,8 +97,9 @@ fun DonationHistoryContent(
                     .fillMaxWidth()
                     .padding(vertical = 4.dp),
                 elevation = CardDefaults.cardElevation(4.dp),
-                colors = CardDefaults.cardColors(containerColor = verdeFondo),
+                colors = CardDefaults.cardColors(containerColor = Color.White),
                 shape = RoundedCornerShape(8.dp),
+                border = BorderStroke(width = 1.dp, color = Color.LightGray)
             ) {
                 Row(
                     modifier = Modifier
