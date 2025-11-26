@@ -8,12 +8,15 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -72,7 +75,7 @@ fun ChatScreen(navController: NavController) {
                             contentScale = ContentScale.Crop
                         )
                         Spacer(Modifier.width(10.dp))
-                        Text(text = "Ana - Abrigos de invierno", fontSize = 18.sp)
+                        Text(text = "", fontSize = 18.sp)
                     }
                 },
                 navigationIcon = {
@@ -89,6 +92,36 @@ fun ChatScreen(navController: NavController) {
 
                 )
         },
+        bottomBar = {
+            Column(
+                modifier = Modifier.background(Color.White)
+                    .fillMaxWidth()
+                    .windowInsetsPadding(WindowInsets.navigationBars)
+                    .padding(bottom = 16.dp, end =16.dp, start = 16.dp)
+            ){
+                Row(
+                    horizontalArrangement = Arrangement.Absolute.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    OutlinedTextField(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        shape = RoundedCornerShape(20.dp),
+                        value = message,
+                        onValueChange = { message = it },
+                        placeholder = { Text("Mensaje") },
+                        trailingIcon = {
+                            Icon(
+                                imageVector = Icons.Default.Send,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.primary
+                            )
+                        }
+                    )
+
+                }
+            }
+        }
     ) { paddingValues ->
         val scrollState = rememberScrollState()
 
@@ -114,7 +147,7 @@ fun ChatScreen(navController: NavController) {
             }
             Spacer(Modifier.height(20.dp))
             Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.Start) {
-                SpeechBubbleLeft("Hola¿Cómo estás? sigue disponible. Hago entregas enfrente del Coppel de laferrere")
+                SpeechBubbleLeft("Hola¿Cómo estás? sigue disponible. Hago entregas enfrente de central Oeste?")
                 Spacer(Modifier.height(5.dp))
                 SpeechBubbleLeft("Estoy libre hoy a las 17 o mañana a las 12:00 PM")
             }
@@ -147,27 +180,6 @@ fun ChatScreen(navController: NavController) {
             //
             Spacer(Modifier.height(50.dp))
 
-            Row(
-                horizontalArrangement = Arrangement.Absolute.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                OutlinedTextField(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    shape = RoundedCornerShape(20.dp),
-                    value = message,
-                    onValueChange = { message = it },
-                    placeholder = { Text("Mensaje") },
-                    trailingIcon = {
-                        Icon(
-                            imageVector = Icons.Default.Send,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary
-                        )
-                    }
-                )
-
-            }
         }
     }
 }
@@ -219,7 +231,7 @@ fun MeetNotification() {
     ) {
         Column(modifier = Modifier.padding(15.dp)) {
             Spacer(Modifier.height(5.dp))
-            Text(text = "Ana agendo un horario de encuentro.")
+            Text(text = "Juan agendo un horario de encuentro.")
 
             Spacer(Modifier.height(10.dp))
 
@@ -242,7 +254,7 @@ fun MeetNotification() {
                     modifier = Modifier.size(15.dp)
                 )
                 Spacer(Modifier.width(15.dp))
-                Text(text = "Enfrente de Coppel - Comodoro Py 3102, B1757")
+                Text(text = "Central Oeste - Comodoro Py 3102, B1757")
             }
 
         }
@@ -263,7 +275,7 @@ fun Message() {
     ) {
         Column(modifier = Modifier.padding(15.dp)) {
             Spacer(Modifier.height(5.dp))
-            Text(text = "Ana marco el articulo como entregado.")
+            Text(text = "Juan marco el articulo como entregado.")
             Text(text = "¿Cómo fue tu experiencia?", color = Color.Gray, fontSize = 13.sp)
             Spacer(Modifier.height(10.dp))
             Button(
@@ -279,7 +291,7 @@ fun Message() {
                         containerColor = Color(0xFFDCDCDC),
                     ),
             ) {
-                Text(text = "Calificar a Ana", color = Color.DarkGray)
+                Text(text = "Calificar a Juan", color = Color.DarkGray)
             }
         }
 
