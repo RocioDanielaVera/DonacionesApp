@@ -8,16 +8,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.Chat
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.outlined.Chat
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.SentimentVerySatisfied
 import androidx.compose.material3.*
@@ -42,7 +37,6 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.projectdevs.donacionesapp.domain.Donation
 import com.projectdevs.donacionesapp.domain.donaciones
-import com.projectdevs.donacionesapp.domain.historialDonaciones
 import com.projectdevs.donacionesapp.ui.components.DonationCard
 import com.projectdevs.donacionesapp.ui.theme.DonacionesAppTheme
 import com.projectdevs.donacionesapp.ui.theme.Green30
@@ -181,7 +175,7 @@ fun DonatorProfileContent(
                         Text(
                             buildAnnotatedString {
                                 withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                                    append("10")
+                                    append("${donorActiveDonations.size}")
                                 }
                                 append(" Publicaciones")
                             },
